@@ -23,13 +23,13 @@ func ListProjects() error {
 }
 
 // ListProject prints out the project associated with a given project id
-func ListProject(id string) error {
+func ListProject(projectID string) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
-	p, _, err := client.Projects.Get(id)
+	p, _, err := client.Projects.Get(projectID)
 	if err != nil {
 		return err
 	}

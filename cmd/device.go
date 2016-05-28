@@ -128,13 +128,13 @@ func init() {
 	// add command to root
 	RootCmd.AddCommand(deviceCmd)
 
-	// Flags for command packet device listall
+	// Flags for command: packet device listall
 	listDevicesCmd.Flags().String("project-id", "", "Specify the project ID.")
 
-	// Flags for command packet device list
+	// Flags for command: packet device list
 	listDeviceCmd.Flags().String("device-id", "", "Specify ID of device to display.")
 
-	// Flags for command packet device create
+	// Flags for command: packet device create
 	createDeviceCmd.Flags().String("project-id", "", "The project ID.")
 	createDeviceCmd.Flags().String("hostname", "", "Hostname to assign to the created device.")
 	createDeviceCmd.Flags().String("plan", "type_0", "Which server type to create the device. Default is \"type_0\"")

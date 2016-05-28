@@ -15,8 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -25,23 +23,77 @@ var sshCmd = &cobra.Command{
 	Use:   "ssh",
 	Short: "Manage your ssh keys for secure login in the packet platform.",
 	// Long: ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("ssh called")
+}
+
+var listSSHKeysCmd = &cobra.Command{
+	Use:	"listall",
+	Short:	"View all configured SSH keys",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		err := ListSSHKeys()
+		return err
+	},
+}
+
+var listSSHKeyCmd = &cobra.Command{
+	Use:	"list",
+	Short:	"View configured SSH key associated with the given ID.",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		sshKeyID := cmd.Flag("key-id").Value.String()
+		err := ListSSHKey(sshKeyID)
+		return err
+	},
+}
+
+var createSSHKeyCmd = &cobra.Command{
+	Use:	"create",
+	Short:	"Configure a new SSH key",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		key := cmd.Flag("ssh-key").Value.String()
+		label := cmd.Flag("label").Value.String()
+		err := CreateSSHKey(label, key)
+		return err
+	},
+}
+
+var deleteSSHKeyCmd = &cobra.Command{
+	Use:	"delete",
+	Short:	"Delete SSH key associated with the given ID.",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		sshKeyID := cmd.Flag("key-id").Value.String()
+		err := DeleteSSHKey(sshKeyID)
+		return err
+	},
+}
+
+var updateSSHKeyCmd = &cobra.Command{
+	Use:	"update",
+	Short:	"Update a SSH key: change the key or its label",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		sshKeyID := cmd.Flag("key-id").Value.String()
+		key := cmd.Flag("ssh-key").Value.String()
+		label := cmd.Flag("label").Value.String()
+		err := UpdateSSHKey(sshKeyID, label, key)
+		return err
 	},
 }
 
 func init() {
+	// Subcommands
+	sshCmd.AddCommand(listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd)
 	RootCmd.AddCommand(sshCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// sshCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// sshCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
+	
+	// Flags for command: packet ssh list
+	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
+	
+	//Flags for command: packet ssh create
+	listSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
+	listSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
+	
+	// Flags for command: packet ssh delete
+	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
+	
+	// Flags for command: packet ssh update
+	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
+	listSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
+	listSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
 }

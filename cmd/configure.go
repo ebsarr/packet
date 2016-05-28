@@ -23,22 +23,12 @@ var configureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "Enable default configs for the packet cli.",
 	// Long: "",
-	Run: func(cmd *cobra.Command, args []string) {
-		Configure()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := Configure()
+		return err
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(configureCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// configureCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// configureCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }
