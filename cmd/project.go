@@ -26,18 +26,18 @@ var projectCmd = &cobra.Command{
 }
 
 var listProjectsCmd = &cobra.Command{
-	Use:	"listall",
-	Short:	"Print out all projects",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "listall",
+	Short: "Print out all projects",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		err := ListProjects()
 		return err
 	},
 }
 
 var listProjectCmd = &cobra.Command{
-	Use:	"list",
-	Short:	"Print out project associate with the given ID",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "list",
+	Short: "Print out project associate with the given ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := cmd.Flag("project-id").Value.String()
 		err := ListProject(projectID)
 		return err
@@ -45,9 +45,9 @@ var listProjectCmd = &cobra.Command{
 }
 
 var createProjectCmd = &cobra.Command{
-	Use:	"create",
-	Short:	"Create a new project",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "create",
+	Short: "Create a new project",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		name := cmd.Flag("name").Value.String()
 		paymentID := cmd.Flag("payment-id").Value.String()
 		err := CreateProject(name, paymentID)
@@ -56,9 +56,9 @@ var createProjectCmd = &cobra.Command{
 }
 
 var deleteProjectCmd = &cobra.Command{
-	Use:	"delete",
-	Short:	"Delete a project",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "delete",
+	Short: "Delete a project",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := cmd.Flag("project-id").Value.String()
 		err := DeleteProject(projectID)
 		return err
@@ -66,9 +66,9 @@ var deleteProjectCmd = &cobra.Command{
 }
 
 var updateProjectCmd = &cobra.Command{
-	Use:	"update",
-	Short:	"Update a project",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "update",
+	Short: "Update a project",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := cmd.Flag("project-id").Value.String()
 		name := cmd.Flag("name").Value.String()
 		paymentID := cmd.Flag("payment-id").Value.String()
@@ -83,14 +83,14 @@ func init() {
 
 	// Flags for command: packet project list
 	listProjectCmd.Flags().String("project-id", "", "Project ID")
-	
+
 	// Flags for command: packet project create
 	createProjectCmd.Flags().String("name", "", "Project name")
 	createProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
-	
+
 	// Flags for command: packet project delete
 	deleteProjectCmd.Flags().String("project-id", "", "Project ID")
-	
+
 	// Flags for command: packet project update
 	updateProjectCmd.Flags().String("project-id", "", "Project ID")
 	updateProjectCmd.Flags().String("name", "", "Project name")

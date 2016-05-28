@@ -26,9 +26,9 @@ var planCmd = &cobra.Command{
 }
 
 var listPlanCmd = &cobra.Command{
-	Use:	"list",
-	Short:	"Print out available plans.",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "list",
+	Short: "Print out available plans.",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		err := ListPlans()
 		return err
 	},
