@@ -6,27 +6,13 @@ packet is a CLI tool to manage [packet.net](https://www.packet.net) services. Yo
 
 ## Download the binary for your platform
 
+Download relevant binary from the following links:
+
 |Platform| Binary |
 |:-------|:-------|
-|Windows(64bit)|[Download](bin/win_64/win_64.zip)|
-|Mac OS X(64bit)|[Download](bin/osx_64/osx_64.zip)|
-|Linux(64bit)|[Download](bin/lin_64/lin_64.zip)|
-
-## Install from source
-
-Move to your `$GOPATH/src` directory
-```sh
-$ cd $GOPATH/src
-```
-Download project
-```sh
-$ git clone https://github.com/bassirou-sarr/packet
-```
-Install
-```sh
-$ cd packet
-$ go build
-```
+|Windows(64bit)|[Download](bin/win_64)|
+|Mac(64bit)|[Download](bin/osx_64)|
+|Linux(64bit)|[Download](bin/lin_64)|
 
 # Getting started
 
