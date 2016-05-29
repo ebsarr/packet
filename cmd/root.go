@@ -28,10 +28,6 @@ var cfgFile string
 var RootCmd = &cobra.Command{
 	Use:   "packet",
 	Short: "A unified tool to manage your packet services",
-	// Long: "",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -46,16 +42,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports Persistent Flags, which, if defined here,
-	// will be global for your application.
+	// Global flag for setting the API key.
 	RootCmd.PersistentFlags().StringP("key", "k", "", "Specify the api key")
-	RootCmd.MarkFlagRequired("key")
-
-	// RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.packet.yaml)")
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.

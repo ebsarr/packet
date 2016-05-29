@@ -86,14 +86,14 @@ func init() {
 	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 
 	//Flags for command: packet ssh create
-	listSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
-	listSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
+	createSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
+	createSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
 
 	// Flags for command: packet ssh delete
-	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
+	deleteSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 
 	// Flags for command: packet ssh update
-	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
-	listSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
-	listSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
+	updateSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
+	updateSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
+	updateSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
 }
