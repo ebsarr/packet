@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var silent bool
+
 // deviceCmd represents the device command
 var deviceCmd = &cobra.Command{
 	Use:   "device",
@@ -42,7 +44,11 @@ var createDeviceCmd = &cobra.Command{
 		osType := cmd.Flag("os-type").Value.String()
 		billing := cmd.Flag("billing").Value.String()
 		// tags := cmd.Flag("tags").Value.String()
-		err := CreateDevice(projectID, hostname, plan, facility, osType, billing, []string{})
+		if silent {
+			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, []string{})
+			return err
+		}
+		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, []string{})
 		return err
 	},
 }
@@ -123,10 +129,11 @@ func init() {
 	// Flags for command: packet device create
 	createDeviceCmd.Flags().String("project-id", "", "The project ID.")
 	createDeviceCmd.Flags().String("hostname", "", "Hostname to assign to the created device.")
-	createDeviceCmd.Flags().String("plan", "type_0", "Which server type to create the device. Default is \"type_0\"")
-	createDeviceCmd.Flags().String("facility", "", "Location of the device. Available values are: ")
+	createDeviceCmd.Flags().String("plan", "baremetal_0", "Server type to create the device.")
+	createDeviceCmd.Flags().String("facility", "", "DC location. Available values are sjc1: Sunnyvale CA, ewr1: Parsippany NJ, ams1: Amsterdam NL")
 	createDeviceCmd.Flags().String("os-type", "centos_7", "Operating system to deploy to the server.")
-	createDeviceCmd.Flags().String("billing", "hourly", "Choose \"hourly\" or \"monthly\" billing. Default is \"hourly\".")
+	createDeviceCmd.Flags().String("billing", "hourly", "Choose \"hourly\" or \"monthly\" billing.")
+	createDeviceCmd.Flags().BoolVarP(&silent, "silent", "s", false, "Omit provisioning logs")
 
 	// Flags for other device commands that require the device ID.
 	deleteDeviceCmd.Flags().String("device-id", "", "Device ID")

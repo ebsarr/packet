@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"time"
+	
 	"github.com/packethost/packngo"
 )
 
@@ -149,9 +152,68 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 	if err != nil {
 		return err
 	}
-
+	
 	e := MarshallAndPrint(d)
 	return e
+}
+
+// CreateDeviceVerbose creates a new device and logs events till the device is provisionned
+func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle string, tags []string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := packngo.DeviceCreateRequest{
+		HostName:     hostname,
+		Plan:         plan,
+		Facility:     facility,
+		OS:           operatingSystem,
+		BillingCycle: billingCycle,
+		ProjectID:    projectID,
+		UserData:     "",
+		Tags:         tags,
+	}
+
+	d, _, err := client.Devices.Create(&req)
+	if err != nil {
+		return err
+	}
+	
+	// print events till device is provisionned
+	finalEvent := "Provision complete! Your device is ready to go."
+	lastEvent := ""
+	
+	extclient, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	fmt.Println()
+	fmt.Println("Provisioning of device successfully started...")
+		
+	for {
+		events, _, err := extclient.Events.List(d.ID)
+		if err != nil {
+			return err
+		}
+		
+		currentEventO := events[0]
+		
+		if currentEventO.Body != lastEvent {
+			fmt.Printf(" [ %s ] %s\n", currentEventO.Create, currentEventO.Body)
+			lastEvent = currentEventO.Body
+		}
+		
+		if currentEventO.Body == finalEvent {
+			fmt.Println()
+			break
+		}
+		
+		time.Sleep(10 * time.Second)
+	}
+	
+	return ListDevice(d.ID)
 }
 
 // DeleteDevice deletes the device associated with the given device id.
@@ -341,5 +403,39 @@ func UpdateSSHKey(keyID, label, key string) error {
 	}
 
 	e := MarshallAndPrint(k)
+	return e
+}
+
+// IFs to Event API
+
+// ListEvents prints out events by device ID
+func ListEvents(deviceID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	events, _, err := client.Events.List(deviceID)
+	if err != nil {
+		return err
+	}
+	
+	e := MarshallAndPrint(events)
+	return e
+}
+
+// ListEvent prints out event by event ID
+func ListEvent(eventID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	event, _, err := client.Events.Get(eventID)
+	if err != nil {
+		return err
+	}
+	
+	e := MarshallAndPrint(event)
 	return e
 }
