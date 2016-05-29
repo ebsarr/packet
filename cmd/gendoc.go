@@ -7,9 +7,9 @@ import (
 
 // gendocCmd represents the gendoc command
 var gendocCmd = &cobra.Command{
-	Use:   "gendoc",
-	Short: "Generate a markdown documentation file for this tool",
-	Hidden:	true,
+	Use:    "gendoc",
+	Short:  "Generate a markdown documentation file for this tool",
+	Hidden: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		doc.GenMarkdownTree(RootCmd, "./doc")
 	},
