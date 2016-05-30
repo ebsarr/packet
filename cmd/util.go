@@ -33,7 +33,7 @@ func Configure() error {
 	dirPath := filepath.Join(u.HomeDir, ConfigDir)
 	filePath := filepath.Join(dirPath, ConfigFile)
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		os.Mkdir(dirPath, 0644)
+		os.Mkdir(dirPath, 0755)
 	}
 
 	// Declare values for user prompt
@@ -74,7 +74,7 @@ func Configure() error {
 
 	// Write to config file
 	c, err := json.Marshal(newConf)
-	e := ioutil.WriteFile(filePath, c, 0644)
+	e := ioutil.WriteFile(filePath, c, 0755)
 
 	return e
 }
