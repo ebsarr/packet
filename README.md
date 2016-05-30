@@ -102,6 +102,71 @@ $ packet device list --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
 ...
 ```
 
+## Managing SSH keys
+### Create SSH key
+First generate the key
+```sh
+$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/sarre27/.ssh/id_rsa): ./id_rsa
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in bass2@packet/id_rsa.
+Your public key has been saved in bass2@packet/id_rsa.pub.
+The key fingerprint is:
+SHA256:YKBywX5luIx7B+bD1BCkG2kcia/KDuTwkA2If/GswGY sarre27@bdupc004.local
+The key's randomart image is:
++---[RSA 2048]----+
+| ooo+o           |
+|+.o*o.o          |
+|=oOo.*o          |
+| X+oB=..         |
+|+oEB..o S        |
+|==.o=..          |
+|+....o           |
+|o.               |
+|..               |
++----[SHA256]-----+
+```
+Register to packet
+```sh
+$ packet ssh create --label bass2@packet --ssh-key "$(cat id_rsa.pub)"
+{
+    "id": "02b76cb4-ebeb-4eee-8d5d-a6d744aa793b",
+    "label": "bass2@packet",
+    "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGENCZL3i+rrBZb2sQDt6H2xyziJuNB2ylFOnEywlBNdn0bGvXBFpitpOFmumYU7d0c2i2AYqDP8JgCu1sBiv1hENdMoMe8nmJRR8kjz7q+xWP18R+hYCAgvLEsfhW6fp7xpwK4cYTq07axg0hXSg+Lu8zjcm79EfucXPcNeYLq+27yPI3r8WnglMxfxhz7woBOlAjru6UBoCo+kpXwxA987rHoZEOeBpKGe8OzNt4Vqd8XOEYfwslCbsKBNfMJT0Eh/HeQ6WOOpZMsf3p6ufAocCsP5BeyZsChkuyNeNnPjMQG6chL8GzbMjb463IyiRJHkrM0zQPB+ysIhU5o8CP",
+    "fingerprint": "f2:ca:e8:ea:dc:bf:a3:67:ad:4c:21:7a:92:bb:ed:ff",
+    "created_at": "2016-05-30T05:36:29Z",
+    "updated_at": "2016-05-30T05:36:29Z",
+    "user": {
+        "id": "",
+        "href": "/users/0193dabc-a51d-4190-a01e-b270d664db3a"
+    },
+    "href": "/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b"
+}
+```
+### View registerd SSH keys
+```sh
+$ packet ssh listall
+[
+    {
+        "id": "76dee787-07a7-4510-9760-d27d0c51531e",
+        "label": "bass2@pckt",
+        "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFj5UBo8zP4Uet9xsHn83HG9g7fFeGuSLHcjIWpE/WTLqV76H2DA9PCmmUivYi8f/VMSUpKSET2zC8wrzamepPrWXGqoFsB/I1za8ghcjhzN66und5dOPJzH2C+QihU1aH5cBoaPekb03HSK3qKUa1lCa0nmtdkvWxsspC42zXnf4PqOKkolang7sUe3tj4QvajEFxnWozcOc2Nfukv4q9Ml5vqSePCnYWby1oXWafezzQqThNe0+1DUYYKRe46D11E9wPamQiU6v7edlCSrzD2lpKxWGdtXPNZJYivpUdvCoj38sKuEfATsFZKd/HAiuKVe/o7Mpp3ZccbnLNgV1R",
+        "fingerprint": "1f:e9:bf:0d:66:10:5f:6c:47:70:0b:70:c0:d5:db:7c",
+        "created_at": "2016-05-27T10:17:47Z",
+        "updated_at": "2016-05-27T10:17:47Z",
+...
+```
+### Delete key by ID
+```sh
+$ packet ssh delete --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+$ echo $?
+0
+$ packet ssh list --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+Error: GET https://api.packet.net/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b: 404 Not found
+```
+
 ## For more help
 Type `packet -h` in your console or browse the documetation [here](doc/packet.md).
 
