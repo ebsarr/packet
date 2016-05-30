@@ -1,6 +1,6 @@
 # packet, a CLI tool to manage Packet services
 
-packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the documetation [here](doc/packet.md).
+packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
 # Installation
 
@@ -168,7 +168,7 @@ Error: GET https://api.packet.net/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b:
 ```
 
 ## For more help
-Type `packet -h` in your console or browse the documetation [here](doc/packet.md).
+Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 ## License
 [MIT](LICENSE)
