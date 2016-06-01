@@ -2,7 +2,7 @@ package extpackngo
 
 import (
 	"fmt"
-	
+
 	"github.com/packethost/packngo"
 )
 

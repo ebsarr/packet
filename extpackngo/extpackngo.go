@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	
+
 	"github.com/packethost/packngo"
 )
 
@@ -83,7 +83,8 @@ type Client struct {
 	RateLimit packngo.Rate
 
 	// Packet Api Objects
-	Events	EventService
+	Events EventService
+	IPs    IPService
 }
 
 // NewRequest inits a new http request with the proper headers
@@ -171,6 +172,7 @@ func NewClient(consumerToken string, apiKey string, httpClient *http.Client) *Cl
 
 	c := &Client{client: httpClient, BaseURL: BaseURL, UserAgent: userAgent, ConsumerToken: consumerToken, APIKey: apiKey}
 	c.Events = &EventServiceOp{client: c}
+	c.IPs = &IPServiceOp{client: c}
 	return c
 }
 
