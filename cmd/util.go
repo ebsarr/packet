@@ -59,17 +59,18 @@ func Configure() error {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Printf("Enter your API key [ %s ]: ", keySuffix)
 	newKey, _ = reader.ReadString('\n')
+	newKey = strings.TrimSpace(newKey)
 
 	// For debug:
 	// fmt.Printf("New key is: %s\n", newKey)
 
-	if newKey == "\n" {
+	if newKey == "" {
 		// No change.
 		return nil
 	}
 
 	var newConf = &Config{
-		APIKEY: strings.TrimSpace(newKey),
+		APIKEY: newKey,
 	}
 
 	// Write to config file
