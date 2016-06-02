@@ -439,3 +439,20 @@ func ListEvent(eventID string) error {
 	e := MarshallAndPrint(event)
 	return e
 }
+
+// Extention of the Device API to assign IP address
+
+// ListIPAddress prints out ip address by ID
+func ListIPAddress(ipAddressID string) error {
+	return nil
+}
+
+// AssignIPAddress assigns an IP address to a device by ID
+func AssignIPAddress(deviceID, ipAddress string) error {
+	return nil
+}
+
+// UnAssignIPAddress unassigns and IP address from a device
+func UnAssignIPAddress(ipAddressID string) error {
+	return nil
+}
