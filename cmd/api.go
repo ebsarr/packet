@@ -5,6 +5,8 @@ import (
 	"time"
 	
 	"github.com/packethost/packngo"
+	
+	"packet/extpackngo"
 )
 
 // IFs to Projects API
@@ -444,15 +446,47 @@ func ListEvent(eventID string) error {
 
 // ListIPAddress prints out ip address by ID
 func ListIPAddress(ipAddressID string) error {
-	return nil
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	ip, _, err := client.IPs.Get(ipAddressID)
+	if err != nil {
+		return err
+	}
+	
+	e := MarshallAndPrint(ip)
+	return e
 }
 
 // AssignIPAddress assigns an IP address to a device by ID
 func AssignIPAddress(deviceID, ipAddress string) error {
-	return nil
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := extpackngo.IPAddressAssignRequest{
+		Address:	ipAddress,
+	}
+
+	ip, _, err := client.IPs.Assign(deviceID, &req)
+	if err != nil {
+		return err
+	}
+	
+	e := MarshallAndPrint(ip)
+	return e
 }
 
 // UnAssignIPAddress unassigns and IP address from a device
 func UnAssignIPAddress(ipAddressID string) error {
-	return nil
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	_, e := client.IPs.Unassign(ipAddressID)
+	return e
 }

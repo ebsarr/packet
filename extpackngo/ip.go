@@ -21,7 +21,7 @@ type IPAddress struct {
 	ID            string            `json:"id"`
 	Address       string            `json:"address"`
 	Network       string            `json:"network"`
-	AddressFamily string            `json:"address_family"`
+	AddressFamily int               `json:"address_family"`
 	Netmask       string            `json:"netmask"`
 	Public        bool              `json:"public"`
 	Cidr          int               `json:"cidr"`
