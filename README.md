@@ -16,9 +16,9 @@ Download relevant binary from the following links:
 
 ## Install from source: go get
 ```sh
-go get -u github.com/ebsarr/packet
+$ go get -u github.com/ebsarr/packet
 ```
-packet executable will be installed in `$GOPATH/bin` or `$GOBIN`
+`packet` executable will be installed in `$GOPATH/bin` or `$GOBIN`
 
 # Getting started
 
