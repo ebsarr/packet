@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/packethost/packngo"
 	
-	"packet/extpackngo"
+	"github.com/ebsarr/packet/extpackngo"
 )
 
 // NewPacketClient returns a *packngo.Client ready for API calls

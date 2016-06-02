@@ -6,7 +6,7 @@ import (
 	
 	"github.com/packethost/packngo"
 	
-	"packet/extpackngo"
+	"github.com/ebsarr/packet/extpackngo"
 )
 
 // IFs to Projects API
