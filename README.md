@@ -14,6 +14,12 @@ Download relevant binary from the following links:
 |Mac(64bit)|[Download](bin/osx_64)|
 |Linux(64bit)|[Download](bin/lin_64)|
 
+## Install from source: go get
+```sh
+go get -u github.com/ebsarr/packet
+```
+packet executable will be installed in `$GOPATH/bin` or `$GOBIN`
+
 # Getting started
 
 ## Configure your API key
