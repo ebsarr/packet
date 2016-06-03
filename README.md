@@ -21,7 +21,7 @@ $ go get -u github.com/ebsarr/packet
 `packet` executable will be installed in `$GOPATH/bin` or `$GOBIN`
 
 ## Check installation
-```sh
+```
 $ packet -h
 A unified tool to manage your packet services
 
