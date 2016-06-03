@@ -20,6 +20,30 @@ $ go get -u github.com/ebsarr/packet
 ```
 `packet` executable will be installed in `$GOPATH/bin` or `$GOBIN`
 
+## Check installation
+```sh
+$ packet -h
+A unified tool to manage your packet services
+
+Usage:
+  packet [command]
+
+Available Commands:
+  IP          Manage device IP addresses
+  OS          View available operating systems
+  configure   Enable default configs for the packet cli.
+  device      Manage your devices
+  event       View operation logs on a device
+  plan        View available plans.
+  project     Manage your projects.
+  ssh         Manage your ssh keys for secure login in the packet platform.
+
+Flags:
+  -k, --key string   Specify the api key
+
+Use "packet [command] --help" for more information about a command.
+```
+
 # Getting started
 
 ## Configure your API key
