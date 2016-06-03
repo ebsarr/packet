@@ -36,7 +36,7 @@ Available Commands:
   event       View operation logs on a device
   plan        View available plans.
   project     Manage your projects.
-  ssh         Manage your ssh keys for secure login in the packet platform.
+  ssh         Manage your ssh keys for secure login to your packet devices.
 
 Flags:
   -k, --key string   Specify the api key
