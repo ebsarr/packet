@@ -7,7 +7,7 @@ import (
 // sshCmd represents the ssh command
 var sshCmd = &cobra.Command{
 	Use:   "ssh",
-	Short: "Manage your ssh keys for secure login in the packet platform.",
+	Short: "Manage your ssh keys for secure login to your packet devices.",
 	// Long: ``,
 }
 

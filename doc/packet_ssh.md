@@ -1,11 +1,11 @@
 ## packet ssh
 
-Manage your ssh keys for secure login in the packet platform.
+Manage your ssh keys for secure login to your packet devices.
 
 ### Synopsis
 
 
-Manage your ssh keys for secure login in the packet platform.
+Manage your ssh keys for secure login to your packet devices.
 
 ### Options inherited from parent commands
 
