@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 	"time"
-	
+
 	"github.com/packethost/packngo"
-	
+
 	"github.com/ebsarr/packet/extpackngo"
 )
 
@@ -154,7 +154,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(d)
 	return e
 }
@@ -181,40 +181,40 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 	if err != nil {
 		return err
 	}
-	
+
 	// print events till device is provisionned
 	finalEvent := "Provision complete! Your device is ready to go."
 	lastEvent := ""
-	
+
 	extclient, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
-	
+
 	fmt.Println()
 	fmt.Println("Provisioning of device successfully started...")
-		
+
 	for {
 		events, _, err := extclient.Events.List(d.ID)
 		if err != nil {
 			return err
 		}
-		
+
 		currentEventO := events[0]
-		
+
 		if currentEventO.Body != lastEvent {
 			fmt.Printf(" [ %s ] %s\n", currentEventO.Create, currentEventO.Body)
 			lastEvent = currentEventO.Body
 		}
-		
+
 		if currentEventO.Body == finalEvent {
 			fmt.Println()
 			break
 		}
-		
+
 		time.Sleep(10 * time.Second)
 	}
-	
+
 	return ListDevice(d.ID)
 }
 
@@ -416,12 +416,12 @@ func ListEvents(deviceID string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	events, _, err := client.Events.List(deviceID)
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(events)
 	return e
 }
@@ -432,12 +432,12 @@ func ListEvent(eventID string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	event, _, err := client.Events.Get(eventID)
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(event)
 	return e
 }
@@ -450,12 +450,12 @@ func ListIPAddress(ipAddressID string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	ip, _, err := client.IPs.Get(ipAddressID)
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(ip)
 	return e
 }
@@ -468,14 +468,14 @@ func AssignIPAddress(deviceID, ipAddress string) error {
 	}
 
 	req := extpackngo.IPAddressAssignRequest{
-		Address:	ipAddress,
+		Address: ipAddress,
 	}
 
 	ip, _, err := client.IPs.Assign(deviceID, &req)
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(ip)
 	return e
 }
@@ -486,7 +486,67 @@ func UnAssignIPAddress(ipAddressID string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	_, e := client.IPs.Unassign(ipAddressID)
+	return e
+}
+
+// ListIPReservations provides a list of IP resevations for a single project
+func ListIPReservations(projectID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	reservations, _, err := client.IPReservations.List(projectID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(reservations)
+	return e
+}
+
+// RequestMoreIPReservations requests more IP space for a project in order to have additional IP addresses to assign to devices
+func RequestMoreIPReservations(projectID, ipType, comments string, quantity int) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := extpackngo.IPReservationRequest{
+		Type:     ipType,
+		Quantity: quantity,
+		Comments: comments,
+	}
+
+	_, e := client.IPReservations.RequestMore(projectID, &req)
+	return e
+}
+
+// ListIPReservation returns a single IP reservation object
+func ListIPReservation(id string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	reservation, _, err := client.IPReservations.Get(id)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(reservation)
+	return e
+}
+
+// RemoveIPReservation removes an IP reservation from the project
+func RemoveIPReservation(id string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, e := client.IPReservations.Remove(id)
 	return e
 }

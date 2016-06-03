@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/packethost/packngo"
-	
+
 	"github.com/ebsarr/packet/extpackngo"
 )
 
@@ -27,4 +27,3 @@ func NewExtPacketClient() (*extpackngo.Client, error) {
 	packetClient := extpackngo.NewClient("", k, nil)
 	return packetClient, nil
 }
-

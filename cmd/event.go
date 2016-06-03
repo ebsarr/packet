@@ -11,9 +11,9 @@ var eventCmd = &cobra.Command{
 }
 
 var listEventsCmd = &cobra.Command{
-	Use:	"listall",
-	Short:	"View events by device ID",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "listall",
+	Short: "View events by device ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := ListEvents(deviceID)
 		return err
@@ -21,9 +21,9 @@ var listEventsCmd = &cobra.Command{
 }
 
 var listEventCmd = &cobra.Command{
-	Use:	"list",
-	Short:	"View event by ID",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	Use:   "list",
+	Short: "View event by ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
 		eventID := cmd.Flag("event-id").Value.String()
 		err := ListEvent(eventID)
 		return err
@@ -36,7 +36,7 @@ func init() {
 
 	// Flags for command: packet event listall
 	listEventsCmd.Flags().String("device-id", "", "Device ID")
-	
+
 	// Flags for command: packet event list
 	listEventCmd.Flags().String("event-id", "", "Event ID")
 }

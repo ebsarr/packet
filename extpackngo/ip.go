@@ -6,10 +6,12 @@ import (
 	"github.com/packethost/packngo"
 )
 
+// IP API
+
 // IPBasePath ...
 const IPBasePath = "/ips"
 
-// IPService interface defines available event methods
+// IPService interface defines available IP methods
 type IPService interface {
 	Assign(deviceID string, assignRequest *IPAddressAssignRequest) (*IPAddress, *Response, error)
 	Unassign(ipAddressID string) (*Response, error)
@@ -88,4 +90,115 @@ func (i *IPServiceOp) Assign(deviceID string, assignRequest *IPAddressAssignRequ
 	}
 
 	return ip, resp, err
+}
+
+// IP RESERVATIONS API
+
+// IPReservationService interface defines available IPReservation methods
+type IPReservationService interface {
+	List(projectID string) ([]IPReservation, *Response, error)
+	RequestMore(projectID string, ipReservationReq *IPReservationRequest) (*Response, error)
+	Get(ipReservationID string) (*IPReservation, *Response, error)
+	Remove(ipReservationID string) (*Response, error)
+}
+
+// IPReservationServiceOp implements the IPReservationService interface
+type IPReservationServiceOp struct {
+	client *Client
+}
+
+// IPReservationRequest represents the body of a reservation request
+type IPReservationRequest struct {
+	Type     string `json:"type"`
+	Quantity int    `json:"quantity"`
+	Comments string `json:"comments"`
+}
+
+// IPReservation represent an IP reservation for a single project
+type IPReservation struct {
+	ID            string              `json:"id"`
+	Network       string              `json:"network"`
+	Address       string              `json:"address"`
+	AddressFamily int                 `json:"address_family"`
+	Netmask       string              `json:"netmask"`
+	Public        bool                `json:"public"`
+	Cidr          int                 `json:"cidr"`
+	Management    bool                `json:"management"`
+	Manageable    bool                `json:"manageable"`
+	Addon         bool                `json:"addon"`
+	Bill          bool                `json:"bill"`
+	Assignments   []map[string]string `json:"assignments"`
+	Href          string              `json:"href"`
+}
+
+type ipReservationRoot struct {
+	IPReservations []IPReservation `json:"ip_addresses"`
+}
+
+// List provides a list of IP resevations for a single project.
+func (i *IPReservationServiceOp) List(projectID string) ([]IPReservation, *Response, error) {
+	path := fmt.Sprintf("projects/%s%s", projectID, IPBasePath)
+
+	req, err := i.client.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	reservations := new(ipReservationRoot)
+	resp, err := i.client.Do(req, reservations)
+	if err != nil {
+		return nil, resp, err
+	}
+	return reservations.IPReservations, resp, err
+}
+
+// RequestMore requests more IP space for a project in order to have additional IP addresses to assign to devices
+func (i *IPReservationServiceOp) RequestMore(projectID string, ipReservationReq *IPReservationRequest) (*Response, error) {
+	path := fmt.Sprintf("projects/%s%s", projectID, IPBasePath)
+
+	req, err := i.client.NewRequest("POST", path, &ipReservationReq)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := i.client.Do(req, nil)
+	if err != nil {
+		return nil, err
+	}
+	return resp, err
+}
+
+// Get returns a single IP reservation object
+func (i *IPReservationServiceOp) Get(ipReservationID string) (*IPReservation, *Response, error) {
+	path := fmt.Sprintf("%s/%s", IPBasePath, ipReservationID)
+
+	req, err := i.client.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	reservation := new(IPReservation)
+	resp, err := i.client.Do(req, reservation)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return reservation, resp, err
+}
+
+// Remove removes an IP reservation from the project.
+func (i *IPReservationServiceOp) Remove(ipReservationID string) (*Response, error) {
+	path := fmt.Sprintf("%s/%s", IPBasePath, ipReservationID)
+
+	req, err := i.client.NewRequest("DELETE", path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := i.client.Do(req, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
 }
