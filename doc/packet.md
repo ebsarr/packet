@@ -7,16 +7,21 @@ A unified tool to manage your packet services
 
 A unified tool to manage your packet services
 
+```
+packet
+```
+
 ### Options
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO
 * [packet IP](packet_IP.md)	 - Manage device IP addresses
 * [packet OS](packet_OS.md)	 - View available operating systems
-* [packet configure](packet_configure.md)	 - Enable default configs for the packet cli.
+* [packet configure](packet_configure.md)	 - Set default configs for the packet cli.
 * [packet device](packet_device.md)	 - Manage your devices
 * [packet event](packet_event.md)	 - View operation logs on a device
 * [packet plan](packet_plan.md)	 - View available plans.

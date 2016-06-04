@@ -1,11 +1,17 @@
 ## packet configure
 
-Enable default configs for the packet cli.
+Set default configs for the packet cli.
 
 ### Synopsis
 
 
-Enable default configs for the packet cli.
+Set default configs for the packet cli.
+
+The following configurations are supported:
+- default API key
+  This default key will be used if "--key" flag is missing in command.
+- default project ID
+  This ID will be used if "--project-id" flag is missing in command.
 
 ```
 packet configure
@@ -15,6 +21,7 @@ packet configure
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO

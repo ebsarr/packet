@@ -21,6 +21,7 @@ packet project list
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO

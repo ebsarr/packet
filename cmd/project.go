@@ -24,7 +24,7 @@ var listProjectCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Print out project associate with the given ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		err := ListProject(projectID)
 		return err
 	},
@@ -45,7 +45,7 @@ var deleteProjectCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		err := DeleteProject(projectID)
 		return err
 	},
@@ -55,7 +55,7 @@ var updateProjectCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update a project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		name := cmd.Flag("name").Value.String()
 		paymentID := cmd.Flag("payment-id").Value.String()
 		err := UpdateProject(projectID, name, paymentID)

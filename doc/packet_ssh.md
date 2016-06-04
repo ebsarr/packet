@@ -11,6 +11,7 @@ Manage your ssh keys for secure login to your packet devices.
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO

@@ -11,6 +11,7 @@ View operation logs on a device
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO

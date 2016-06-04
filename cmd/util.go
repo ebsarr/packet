@@ -10,6 +10,8 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 // ConfigDir is the location of the config file under user's $HOME dir
@@ -20,7 +22,8 @@ const ConfigFile = "config"
 
 // Config represent default configurations
 type Config struct {
-	APIKEY string `json:"APIKEY"`
+	APIKEY           string `json:"APIKEY"`
+	DefaultProjectID string `json:"DEFAULT_PROJECT_ID"`
 }
 
 // Configure prompts the user to configure a default API key
@@ -30,21 +33,29 @@ func Configure() error {
 		return err
 	}
 
+	// create directory to save configs
 	dirPath := filepath.Join(u.HomeDir, ConfigDir)
 	filePath := filepath.Join(dirPath, ConfigFile)
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 		os.Mkdir(dirPath, 0755)
 	}
 
+	// Modify to true if user changes the config
+	var hasChanged bool
+
 	// Declare values for user prompt
 	var newKey string
 	var currentKey string
 	var keySuffix string
+	var currentProjectID string
+	var projectID string
 
-	// Get the current key
-	conf, _ := ReadKey()
+	// Get the current key, create a suffix for hint.
+	// the current key shall not be displayed on the console
+	conf, _ := ReadConfigs()
 	if conf != nil {
 		currentKey = conf.APIKEY
+		currentProjectID = conf.DefaultProjectID
 	}
 
 	if currentKey != "" && len(currentKey) > 5 {
@@ -55,33 +66,44 @@ func Configure() error {
 		keySuffix = "*****" + keySuffix
 	}
 
-	// Get API from user
+	// Get API key and default project ID from user
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Printf("Enter your API key [ %s ]: ", keySuffix)
 	newKey, _ = reader.ReadString('\n')
 	newKey = strings.TrimSpace(newKey)
+	fmt.Printf("Enter your default project ID [ %s ]: ", currentProjectID)
+	projectID, _ = reader.ReadString('\n')
+	projectID = strings.TrimSpace(projectID)
 
 	// For debug:
 	// fmt.Printf("New key is: %s\n", newKey)
+	// fmt.Printf("New PID: %s\n", projectID)
 
-	if newKey == "" {
-		// No change.
-		return nil
+	if newKey != "" {
+		conf.APIKEY = newKey
+		hasChanged = true
 	}
 
-	var newConf = &Config{
-		APIKEY: newKey,
+	if projectID != "" {
+		conf.DefaultProjectID = projectID
+		hasChanged = true
 	}
 
-	// Write to config file
-	c, err := json.Marshal(newConf)
-	e := ioutil.WriteFile(filePath, c, 0755)
+	if hasChanged {
+		// Write to config file
+		c, err := json.MarshalIndent(conf, "", "\t")
+		if err != nil {
+			return err
+		}
+		e := ioutil.WriteFile(filePath, c, 0755)
+		return e
+	}
 
-	return e
+	return nil
 }
 
-// ReadKey reads the APIKEY from the config file
-func ReadKey() (*Config, error) {
+// ReadConfigs reads the current config file and returns a Config object
+func ReadConfigs() (*Config, error) {
 	u, err := user.Current()
 	if err != nil {
 		return nil, err
@@ -103,18 +125,14 @@ func ReadKey() (*Config, error) {
 	return &c, nil
 }
 
-// GetAPIKey return either the default configured key or the one passed through the cli,
+// GetAPIKey returns either the default configured key or the one passed through the cli,
 // which has highest priority
 func GetAPIKey() (string, error) {
 
 	apiKey := RootCmd.Flag("key").Value.String()
 	if apiKey == "" {
-		config, err := ReadKey()
-		if err != nil {
-			apiKey = ""
-		} else {
-			apiKey = config.APIKEY
-		}
+		config, _ := ReadConfigs()
+		apiKey = config.APIKEY
 	}
 
 	if apiKey == "" {
@@ -123,6 +141,19 @@ func GetAPIKey() (string, error) {
 	}
 
 	return apiKey, nil
+}
+
+// GetProjectID returns the project ID passed to the CLI, otherwise the configure default ID.
+func GetProjectID(cmd *cobra.Command) string {
+	// The flag to pass a project ID shall always be "--project-id"
+	projectID := cmd.Flag("project-id").Value.String()
+	if projectID == "" {
+		config, _ := ReadConfigs()
+		projectID = config.DefaultProjectID
+	}
+
+	return projectID
+
 }
 
 // MarshallAndPrint pretty-prints any object as a JSON string

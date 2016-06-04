@@ -17,7 +17,7 @@ var listDevicesCmd = &cobra.Command{
 	Use:   "listall",
 	Short: "Print out all devices in a project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		err := ListDevices(projectID)
 		return err
 	},
@@ -37,7 +37,7 @@ var createDeviceCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new device",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		hostname := cmd.Flag("hostname").Value.String()
 		plan := cmd.Flag("plan").Value.String()
 		facility := cmd.Flag("facility").Value.String()

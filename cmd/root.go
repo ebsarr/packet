@@ -8,12 +8,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+const version = "0.1"
+
 var cfgFile string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "packet",
-	Short: "A unified tool to manage your packet services",
+	Use:          "packet",
+	Short:        "A unified tool to manage your packet services",
+	SilenceUsage: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		showVersion, _ := cmd.Flags().GetBool("version")
+		if showVersion {
+			fmt.Printf("%s\n", version)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -30,6 +39,7 @@ func init() {
 
 	// Global flag for setting the API key.
 	RootCmd.PersistentFlags().StringP("key", "k", "", "Specify the api key")
+	RootCmd.PersistentFlags().BoolP("version", "v", false, "Show version and exit")
 }
 
 // initConfig reads in config file and ENV variables if set.

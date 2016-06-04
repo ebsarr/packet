@@ -45,7 +45,7 @@ var listReservationsCmd = &cobra.Command{
 	Use:   "list-reservations",
 	Short: "Print out a list of IP resevations for a single project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		err := ListIPReservations(projectID)
 		return err
 	},
@@ -55,7 +55,7 @@ var requestMoreIPReservationsCmd = &cobra.Command{
 	Use:   "request-more",
 	Short: "Request more IP space for a project in order to have additional IP addresses to assign to devices",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		projectID := cmd.Flag("project-id").Value.String()
+		projectID := GetProjectID(cmd)
 		ipType := cmd.Flag("type").Value.String()
 		quantity, err := cmd.Flags().GetInt("quantity")
 		if err != nil {

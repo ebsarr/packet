@@ -24,6 +24,7 @@ packet IP request-more
 
 ```
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 ```
 
 ### SEE ALSO
