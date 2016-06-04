@@ -550,3 +550,215 @@ func RemoveIPReservation(id string) error {
 	_, e := client.IPReservations.Remove(id)
 	return e
 }
+
+// Ifs to VOLUMES API
+
+// ListStorages returns a list of the current projects’s volumes
+func ListStorages(projectID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	storages, _, err := client.Storages.List(projectID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(storages)
+	return e
+}
+
+// CreateStorage creates a new volume
+func CreateStorage(projectID, description, plan, facility string, size int) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	// TODO: Add ability to set snapshot policy
+	request := &extpackngo.StorageCreateRequest{
+		Description:      description,
+		Plan:             plan,
+		Size:             size,
+		Facility:         facility,
+		SnapshotPolicies: []extpackngo.SnapshotPolicy{},
+	}
+
+	storage, _, err := client.Storages.Create(projectID, request)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(storage)
+	return e
+}
+
+// ListStorage returns a volume by ID
+func ListStorage(storageID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	storage, _, err := client.Storages.Get(storageID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(storage)
+	return e
+}
+
+// UpdateStorage updates a volume
+func UpdateStorage(storageID, description string, size int, locked bool) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.StorageUpdateRequest{
+		Description: description,
+		Size:        size,
+		Locked:      locked,
+	}
+
+	_, e := client.Storages.Update(storageID, request)
+	return e
+}
+
+// DeleteStorage deletes a volume
+func DeleteStorage(storageID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, e := client.Storages.Delete(storageID)
+	return e
+}
+
+// CreateSnapshotPolicy creates a snapshot policy
+func CreateSnapshotPolicy(storageID, frequency string, count int) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.CreateSnapshotPolicyRequest{
+		SnapshotCount:     count,
+		SnapshotFrequency: frequency,
+	}
+
+	_, e := client.Storages.CreateSnapshotPolicy(storageID, request)
+	return e
+}
+
+// UpdateSnapshotPolicy updates a snapshot policy
+func UpdateSnapshotPolicy(snapshotPolicyID, frequency string, count int) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.UpdateSnapshotPolicyRequest{
+		SnapshotCount:     count,
+		SnapshotFrequency: frequency,
+	}
+
+	_, e := client.Storages.UpdateSnapshotPolicy(snapshotPolicyID, request)
+	return e
+}
+
+// DeleteSnapshotPolicy deletes a snapshot policy
+func DeleteSnapshotPolicy(snapshotPolicyID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, e := client.Storages.DeleteSnapshotPolicy(snapshotPolicyID)
+	return e
+}
+
+// ListSnapshots returns a list of the current volume’s snapshots
+func ListSnapshots(snapshotPolicyID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	snapshots, _, err := client.Storages.ListSnapshots(snapshotPolicyID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(snapshots)
+	return e
+}
+
+// CreateSnapshot creates a new snapshot of your volume
+func CreateSnapshot(snapshotPolicyID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.CreateSnapShotRequest{}
+
+	_, e := client.Storages.CreateSnapshot(snapshotPolicyID, request)
+	return e
+}
+
+// DeleteSnapshot deletes a snapshot
+func DeleteSnapshot(storadeID, snapshotID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, e := client.Storages.DeleteSnapshot(storadeID, snapshotID)
+	return e
+}
+
+// ListStorageEvents returns a list of the current volume’s events
+func ListStorageEvents(storageID, snapshotID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	events, _, err := client.Storages.ListEvents(storageID, snapshotID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(events)
+	return e
+}
+
+// AttachStorage attaches your volume to a device
+func AttachStorage(storageID, snapshotID, deviceID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.AttachStorageRequest{
+		DeviceID: deviceID,
+	}
+
+	_, e := client.Storages.Attach(storageID, snapshotID, request)
+	return e
+}
+
+// DetachStorage detaches your volume from a device
+func DetachStorage(attachmentID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, e := client.Storages.Detach(attachmentID)
+	return e
+}

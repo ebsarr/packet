@@ -88,6 +88,7 @@ type Client struct {
 	Events         EventService
 	IPs            IPService
 	IPReservations IPReservationService
+	Storages       StorageService
 }
 
 // NewRequest inits a new http request with the proper headers
@@ -177,6 +178,7 @@ func NewClient(consumerToken string, apiKey string, httpClient *http.Client) *Cl
 	c.Events = &EventServiceOp{client: c}
 	c.IPs = &IPServiceOp{client: c}
 	c.IPReservations = &IPReservationServiceOp{client: c}
+	c.Storages = &StorageServiceOP{client: c}
 	return c
 }
 
