@@ -2,6 +2,8 @@
 
 packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
+![Go report](https://goreportcard.com/badge/github.com/ebsarr/packet)
+
 # Installation
 
 Install with `go get`
