@@ -21,7 +21,6 @@ type StorageService interface {
 	ListSnapshots(snapshotPolicyID string) ([]Snapshot, *Response, error)
 	CreateSnapshot(snapshotPolicyID string, request *CreateSnapShotRequest) (*Response, error)
 	DeleteSnapshot(storageID, snapshotID string) (*Response, error)
-	ListEvents(storageID, snapshotID string) ([]Event, *Response, error)
 	Attach(storageID, snapshotID string, request *AttachStorageRequest) (*Response, error)
 	Detach(attachmentID string) (*Response, error)
 }
@@ -298,24 +297,6 @@ func (s *StorageServiceOP) DeleteSnapshot(storageID, snapshotID string) (*Respon
 	}
 
 	return resp, err
-}
-
-// ListEvents returns a list of the current volume’s events
-func (s *StorageServiceOP) ListEvents(storageID, snapshotID string) ([]Event, *Response, error) {
-	path := fmt.Sprintf("%s/%s/snapshots/%s", storageBasePath, storageID, snapshotID)
-
-	req, err := s.client.NewRequest("GET", path, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	root := new(eventsRoot)
-	resp, err := s.client.Do(req, root)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return root.Events, resp, err
 }
 
 // Attach attaches your volume to a device

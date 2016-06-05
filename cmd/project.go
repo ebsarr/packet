@@ -63,8 +63,18 @@ var updateProjectCmd = &cobra.Command{
 	},
 }
 
+var listProjectEventsCmd = &cobra.Command{
+	Use:   "list-events",
+	Short: "View events by project ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		projectID := GetProjectID(cmd)
+		err := ListProjectEvents(projectID)
+		return err
+	},
+}
+
 func init() {
-	projectCmd.AddCommand(listProjectsCmd, listProjectCmd, createProjectCmd, deleteProjectCmd, updateProjectCmd)
+	projectCmd.AddCommand(listProjectsCmd, listProjectCmd, createProjectCmd, deleteProjectCmd, updateProjectCmd, listProjectEventsCmd)
 	RootCmd.AddCommand(projectCmd)
 
 	// Flags for command: packet project list
@@ -81,4 +91,7 @@ func init() {
 	updateProjectCmd.Flags().String("project-id", "", "Project ID")
 	updateProjectCmd.Flags().String("name", "", "Project name")
 	updateProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
+	
+	// Flags for command: packet project list-events
+	listProjectEventsCmd.Flags().String("project-id", "", "Project ID")
 }

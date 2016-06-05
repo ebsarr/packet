@@ -113,9 +113,19 @@ var rebootDeviceCmd = &cobra.Command{
 	},
 }
 
+var listDeviceEventsCmd = &cobra.Command{
+	Use:   "list-events",
+	Short: "View events by device ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		deviceID := cmd.Flag("device-id").Value.String()
+		err := ListDeviceEvents(deviceID)
+		return err
+	},
+}
+
 func init() {
 	// Subcommands
-	deviceCmd.AddCommand(listDevicesCmd, listDeviceCmd, createDeviceCmd, deleteDeviceCmd, lockDeviceCmd, unlockDeviceCmd, powerOnDeviceCmd, powerOffDeviceCmd, rebootDeviceCmd)
+	deviceCmd.AddCommand(listDevicesCmd, listDeviceCmd, createDeviceCmd, deleteDeviceCmd, lockDeviceCmd, unlockDeviceCmd, powerOnDeviceCmd, powerOffDeviceCmd, rebootDeviceCmd, listDeviceEventsCmd)
 
 	// add command to root
 	RootCmd.AddCommand(deviceCmd)
@@ -142,4 +152,5 @@ func init() {
 	powerOnDeviceCmd.Flags().String("device-id", "", "Device ID")
 	powerOffDeviceCmd.Flags().String("device-id", "", "Device ID")
 	rebootDeviceCmd.Flags().String("device-id", "", "Device ID")
+	listDeviceEventsCmd.Flags().String("device-id", "", "Device ID")
 }

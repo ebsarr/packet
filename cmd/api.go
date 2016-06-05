@@ -9,6 +9,24 @@ import (
 	"github.com/ebsarr/packet/extpackngo"
 )
 
+// Ifs to Facility API
+
+// ListFacilities returns a list of packet DCs
+func ListFacilities() error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+	
+	facilities, _, err := client.Facilities.List()
+	if err != nil {
+		return err
+	}
+	
+	e := MarshallAndPrint(facilities)
+	return e
+}
+
 // IFs to Projects API
 
 // ListProjects prints out all projects of the user.
@@ -195,7 +213,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 	fmt.Println("Provisioning of device successfully started...")
 
 	for {
-		events, _, err := extclient.Events.List(d.ID)
+		events, _, err := extclient.Events.ListDeviceEvents(d.ID)
 		if err != nil {
 			return err
 		}
@@ -410,14 +428,14 @@ func UpdateSSHKey(keyID, label, key string) error {
 
 // IFs to Event API
 
-// ListEvents prints out events by device ID
-func ListEvents(deviceID string) error {
+// ListDeviceEvents prints out events by device ID
+func ListDeviceEvents(id string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	events, _, err := client.Events.List(deviceID)
+	events, _, err := client.Events.ListDeviceEvents(id)
 	if err != nil {
 		return err
 	}
@@ -426,19 +444,35 @@ func ListEvents(deviceID string) error {
 	return e
 }
 
-// ListEvent prints out event by event ID
-func ListEvent(eventID string) error {
+// ListProjectEvents prints out events by device ID
+func ListProjectEvents(id string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	event, _, err := client.Events.Get(eventID)
+	events, _, err := client.Events.ListProjectEvents(id)
 	if err != nil {
 		return err
 	}
 
-	e := MarshallAndPrint(event)
+	e := MarshallAndPrint(events)
+	return e
+}
+
+// ListStorageEvents prints out events by device ID
+func ListStorageEvents(storageID, snapshotID string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	events, _, err := client.Events.ListStorageEvents(storageID, snapshotID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(events)
 	return e
 }
 
@@ -718,22 +752,6 @@ func DeleteSnapshot(storageID, snapshotID string) error {
 	}
 
 	_, e := client.Storages.DeleteSnapshot(storageID, snapshotID)
-	return e
-}
-
-// ListStorageEvents returns a list of the current volume’s events
-func ListStorageEvents(storageID, snapshotID string) error {
-	client, err := NewExtPacketClient()
-	if err != nil {
-		return err
-	}
-
-	events, _, err := client.Storages.ListEvents(storageID, snapshotID)
-	if err != nil {
-		return err
-	}
-
-	e := MarshallAndPrint(events)
 	return e
 }
 

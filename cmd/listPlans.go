@@ -5,15 +5,9 @@ import (
 )
 
 // planCmd represents the plan command
-var planCmd = &cobra.Command{
-	Use:   "plan",
+var listPlansCmd = &cobra.Command{
+	Use:   "list-plans",
 	Short: "View available plans.",
-	// Long: ``,
-}
-
-var listPlanCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Print out available plans.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := ListPlans()
 		return err
@@ -21,6 +15,5 @@ var listPlanCmd = &cobra.Command{
 }
 
 func init() {
-	planCmd.AddCommand(listPlanCmd)
-	RootCmd.AddCommand(planCmd)
+	RootCmd.AddCommand(listPlansCmd)
 }

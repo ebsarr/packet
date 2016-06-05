@@ -20,15 +20,15 @@ Usage:
   packet [command]
 
 Available Commands:
-  IP          Manage device IP addresses
-  OS          View available operating systems
-  configure   Set default configs for the packet cli.
-  device      Manage your devices
-  event       View operation logs on a device
-  plan        View available plans.
-  project     Manage your projects.
-  ssh         Manage your ssh keys for secure login to your packet devices.
-  storage     Manage your storages
+  IP              Manage device IP addresses
+  configure       Set default configs for the packet cli.
+  device          Manage your devices
+  list-facilities View a list of facilities(packet DCs)
+  list-os         View available operating systems
+  list-plans      View available plans.
+  project         Manage your projects.
+  ssh             Manage your ssh keys for secure login to your packet devices.
+  storage         Manage your storages
 
 Flags:
   -k, --key string   Specify the api key

@@ -19,6 +19,7 @@ Manage your devices
 * [packet device create](packet_device_create.md)	 - Create a new device
 * [packet device delete](packet_device_delete.md)	 - Delete device
 * [packet device list](packet_device_list.md)	 - Print out device info for the given device ID.
+* [packet device list-events](packet_device_list-events.md)	 - View events by device ID
 * [packet device listall](packet_device_listall.md)	 - Print out all devices in a project
 * [packet device lock](packet_device_lock.md)	 - Lock device
 * [packet device power-off](packet_device_power-off.md)	 - Power off device

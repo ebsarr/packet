@@ -20,11 +20,11 @@ packet
 
 ### SEE ALSO
 * [packet IP](packet_IP.md)	 - Manage device IP addresses
-* [packet OS](packet_OS.md)	 - View available operating systems
 * [packet configure](packet_configure.md)	 - Set default configs for the packet cli.
 * [packet device](packet_device.md)	 - Manage your devices
-* [packet event](packet_event.md)	 - View operation logs on a device
-* [packet plan](packet_plan.md)	 - View available plans.
+* [packet list-facilities](packet_list-facilities.md)	 - View a list of facilities(packet DCs)
+* [packet list-os](packet_list-os.md)	 - View available operating systems
+* [packet list-plans](packet_list-plans.md)	 - View available plans.
 * [packet project](packet_project.md)	 - Manage your projects.
 * [packet ssh](packet_ssh.md)	 - Manage your ssh keys for secure login to your packet devices.
 * [packet storage](packet_storage.md)	 - Manage your storages

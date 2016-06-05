@@ -19,6 +19,7 @@ Manage your projects.
 * [packet project create](packet_project_create.md)	 - Create a new project
 * [packet project delete](packet_project_delete.md)	 - Delete a project
 * [packet project list](packet_project_list.md)	 - Print out project associate with the given ID
+* [packet project list-events](packet_project_list-events.md)	 - View events by project ID
 * [packet project listall](packet_project_listall.md)	 - Print out all projects
 * [packet project update](packet_project_update.md)	 - Update a project
 
