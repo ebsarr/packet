@@ -8,7 +8,7 @@ import (
 var listFacilitiesCmd = &cobra.Command{
 	Use:   "list-facilities",
 	Short: "View a list of facilities(packet DCs)",
-	RunE:	func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		err := ListFacilities()
 		return err
 	},

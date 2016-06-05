@@ -218,26 +218,26 @@ func init() {
 
 	// Flags for command: packet storage delete-snapshot-policy
 	deleteSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")
-	
+
 	// Flags for command: packet storage list-snapshots
 	listSnapshotsCmd.Flags().String("policy-id", "", "Snapshot policy ID")
-	
+
 	// Flags for command: packet storage create-snapshot
 	createSnapshotCmd.Flags().String("policy-id", "", "Snapshot policy ID")
-	
+
 	// Flags for command: packet storage delete-snapshot
 	deleteSnapshotCmd.Flags().String("storage-id", "", "Storage ID")
 	deleteSnapshotCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
-	
+
 	// Flags for command: packet storage list-events
 	listStorageEventsCmd.Flags().String("storage-id", "", "Storage ID")
 	listStorageEventsCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
-	
+
 	// Flags for command: packet storage attach
 	attachStorageCmd.Flags().String("storage-id", "", "Storage ID")
 	attachStorageCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
 	attachStorageCmd.Flags().String("device-id", "", "Device ID")
-	
+
 	// Flags for command: packet storage detach
 	detachStorageCmd.Flags().String("attachement-id", "", "Attachment ID")
 }

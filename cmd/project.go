@@ -91,7 +91,7 @@ func init() {
 	updateProjectCmd.Flags().String("project-id", "", "Project ID")
 	updateProjectCmd.Flags().String("name", "", "Project name")
 	updateProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
-	
+
 	// Flags for command: packet project list-events
 	listProjectEventsCmd.Flags().String("project-id", "", "Project ID")
 }

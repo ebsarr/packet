@@ -1,4 +1,4 @@
-// extpackngo is an extension of packngo, the official packet.net library.
+// Package extpackngo is an extension of packngo, the official packet.net library.
 // It implements APIs missing in the packngo library.
 package extpackngo
 

@@ -17,12 +17,12 @@ func ListFacilities() error {
 	if err != nil {
 		return err
 	}
-	
+
 	facilities, _, err := client.Facilities.List()
 	if err != nil {
 		return err
 	}
-	
+
 	e := MarshallAndPrint(facilities)
 	return e
 }

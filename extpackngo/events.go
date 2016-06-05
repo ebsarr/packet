@@ -97,7 +97,7 @@ func (e *EventServiceOp) ListStorageEvents(storageID, snapshotID string) ([]Even
 /* Get returns and event by ID
  func (e *EventServiceOp) Get(eventID string) (*Event, *Response, error) {
  	path := fmt.Sprintf("%s/%s", eventBasePath, eventID)
- 
+
 	req, err := e.client.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, nil, err
