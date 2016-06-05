@@ -1,17 +1,3 @@
-// Copyright © 2016 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
@@ -90,8 +76,48 @@ var deleteStorageCmd = &cobra.Command{
 	},
 }
 
+var createSnapshotPolicyCmd = &cobra.Command{
+	Use:	"create-snapshot-policy",
+	Short:	"Create a snapshot policy",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		storageID := cmd.Flag("storage-id").Value.String()
+		snapshotFrequency := cmd.Flag("frequency").Value.String()
+		snapshotCount, err := cmd.Flags().GetInt("count")
+		if err != nil {
+			return err
+		}
+		e := CreateSnapshotPolicy(storageID, snapshotFrequency, snapshotCount)
+		return e
+	},
+}
+
+var updateSnapshotPolicyCmd = &cobra.Command{
+	Use:	"update-snapshot-policy",
+	Short:	"Update a snapshot policy",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		policyID := cmd.Flag("policy-id").Value.String()
+		snapshotFrequency := cmd.Flag("frequency").Value.String()
+		snapshotCount, err := cmd.Flags().GetInt("count")
+		if err != nil {
+			return err
+		}
+		e := UpdateSnapshotPolicy(policyID, snapshotFrequency, snapshotCount)
+		return e
+	},
+}
+
+var deleteSnapshotPolicyCmd = &cobra.Command{
+	Use:	"delete-snapshot-policy",
+	Short:	"Delete a snapshot policy",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		policyID := cmd.Flag("policy-id").Value.String()
+		err := DeleteSnapshotPolicy(policyID)
+		return err
+	},
+}
+
 func init() {
-	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd, deleteStorageCmd)
+	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd, deleteStorageCmd, createSnapshotPolicyCmd, updateSnapshotPolicyCmd, deleteSnapshotPolicyCmd)
 	RootCmd.AddCommand(storageCmd)
 
 	// Flags for command: packet storage listall
@@ -115,5 +141,17 @@ func init() {
 	
 	// Flags for command: packet storage delete
 	deleteStorageCmd.Flags().String("storage-id", "", "Storage ID")
-
+	
+	// Flags for command: packet storage create-snapshot-policy
+	createSnapshotPolicyCmd.Flags().String("storage-id", "", "Storage ID")
+	createSnapshotPolicyCmd.Flags().String("frequency", "", "Snapshot frequency")
+	createSnapshotPolicyCmd.Flags().Int("count", 1, "Volume size")
+	
+	// Flags for command: packet storage update-snapshot-policy
+	updateSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")
+	updateSnapshotPolicyCmd.Flags().String("frequency", "", "Snapshot frequency")
+	updateSnapshotPolicyCmd.Flags().Int("count", 1, "Volume size")
+	
+	// Flags for command: packet storage delete-snapshot-policy
+	deleteSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")
 }
