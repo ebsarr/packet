@@ -80,8 +80,18 @@ var updateStorageCmd = &cobra.Command{
 	},
 }
 
+var deleteStorageCmd = &cobra.Command{
+	Use:	"delete",
+	Short:	"Delete storage",
+	RunE:	func(cmd *cobra.Command, args []string) error {
+		storageID := cmd.Flag("storage-id").Value.String()
+		err := DeleteStorage(storageID)
+		return err
+	},
+}
+
 func init() {
-	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd)
+	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd, deleteStorageCmd)
 	RootCmd.AddCommand(storageCmd)
 
 	// Flags for command: packet storage listall
@@ -102,5 +112,8 @@ func init() {
 	updateStorageCmd.Flags().String("desc", "", "Description")
 	updateStorageCmd.Flags().Int("size", 120, "Volume size")
 	updateStorageCmd.Flags().Bool("lock", false, "Update and lock")
+	
+	// Flags for command: packet storage delete
+	deleteStorageCmd.Flags().String("storage-id", "", "Storage ID")
 
 }
