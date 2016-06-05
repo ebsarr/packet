@@ -711,13 +711,13 @@ func CreateSnapshot(snapshotPolicyID string) error {
 }
 
 // DeleteSnapshot deletes a snapshot
-func DeleteSnapshot(storadeID, snapshotID string) error {
+func DeleteSnapshot(storageID, snapshotID string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	_, e := client.Storages.DeleteSnapshot(storadeID, snapshotID)
+	_, e := client.Storages.DeleteSnapshot(storageID, snapshotID)
 	return e
 }
 

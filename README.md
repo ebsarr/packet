@@ -4,42 +4,35 @@ packet is a CLI tool to manage [packet.net](https://www.packet.net) services. Yo
 
 # Installation
 
-## Download the binary for your platform
-
-Download relevant binary from the following links:
-
-|Platform| Binary |
-|:-------|:-------|
-|Windows(64bit)|[Download](bin/win_64)|
-|Mac(64bit)|[Download](bin/osx_64)|
-|Linux(64bit)|[Download](bin/lin_64)|
-
-## Install from source: go get
+Install with `go get`
 ```sh
 $ go get -u github.com/ebsarr/packet
 ```
 `packet` executable will be installed in `$GOPATH/bin` or `$GOBIN`
 
-## Check installation
+Try the help
 ```
 $ packet -h
 A unified tool to manage your packet services
 
 Usage:
+  packet [flags]
   packet [command]
 
 Available Commands:
   IP          Manage device IP addresses
   OS          View available operating systems
-  configure   Enable default configs for the packet cli.
+  configure   Set default configs for the packet cli.
   device      Manage your devices
   event       View operation logs on a device
   plan        View available plans.
   project     Manage your projects.
   ssh         Manage your ssh keys for secure login to your packet devices.
+  storage     Manage your storages
 
 Flags:
   -k, --key string   Specify the api key
+  -v, --version      Show version and exit
 
 Use "packet [command] --help" for more information about a command.
 ```
