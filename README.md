@@ -48,7 +48,7 @@ $ packet configure
 Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
-**NOTE:** Without your API key configured, you'll need to specify it in every command in the form: `packet --key <APIKEY> <command> <subcommand> <flags>`. You can also optionnaly confiugre a default project ID.
+**NOTE:** Without your API key configured, you'll need to specify it in every command in the form: `packet --key <APIKEY> <command> <subcommand> <flags>`. You can also optionnaly configure a default project ID.
 
 ## Manage your projects
 
