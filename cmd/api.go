@@ -604,19 +604,23 @@ func ListStorages(projectID string) error {
 }
 
 // CreateStorage creates a new volume
-func CreateStorage(projectID, description, plan, facility string, size int) error {
+func CreateStorage(projectID, description, plan, facility, frequency string, size, count int) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	// TODO: Add ability to set snapshot policy
+	// Create a snapshot policy
+	sp := &extpackngo.SnapshotPolicy{
+		SnapshotFrequency:	frequency,
+		SnapshotCount:	count,
+	}
 	request := &extpackngo.StorageCreateRequest{
 		Description:      description,
 		Plan:             plan,
 		Size:             size,
 		Facility:         facility,
-		SnapshotPolicies: []extpackngo.SnapshotPolicy{},
+		SnapshotPolicies: sp,
 	}
 
 	storage, _, err := client.Storages.Create(projectID, request)

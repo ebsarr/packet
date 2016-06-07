@@ -32,7 +32,12 @@ var createStorageCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		e := CreateStorage(projectID, description, plan, facility, size)
+		snapshotFrequency := cmd.Flag("frequency").Value.String()
+		snapshotCount, err := cmd.Flags().GetInt("count")
+		if err != nil {
+			return err
+		}
+		e := CreateStorage(projectID, description, plan, facility, snapshotFrequency, size, snapshotCount)
 		return e
 	},
 }
@@ -193,6 +198,8 @@ func init() {
 	createStorageCmd.Flags().String("plan", "storage_1", "storage_1 || storage_2")
 	createStorageCmd.Flags().String("facility", "ewr1", "ewr1 || sjc1 || ams1")
 	createStorageCmd.Flags().Int("size", 120, "Volume size")
+	createStorageCmd.Flags().String("frequency", "15min", "Snapshot frequency")
+	createStorageCmd.Flags().Int("count", 4, "Snapshots count")
 
 	// Flags for command: packet storage list
 	listStorageCmd.Flags().String("storage-id", "", "Storage ID")
@@ -213,8 +220,8 @@ func init() {
 
 	// Flags for command: packet storage update-snapshot-policy
 	updateSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")
-	updateSnapshotPolicyCmd.Flags().String("frequency", "", "Snapshot frequency")
-	updateSnapshotPolicyCmd.Flags().Int("count", 1, "Snapshots count")
+	updateSnapshotPolicyCmd.Flags().String("frequency", "15min", "Snapshot frequency")
+	updateSnapshotPolicyCmd.Flags().Int("count", 4, "Snapshots count")
 
 	// Flags for command: packet storage delete-snapshot-policy
 	deleteSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")

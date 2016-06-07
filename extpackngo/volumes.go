@@ -55,7 +55,7 @@ type StorageCreateRequest struct {
 	Plan             string           `json:"plan"`
 	Size             int              `json:"size"`
 	Facility         string           `json:"facility"`
-	SnapshotPolicies []SnapshotPolicy `json:"snapshot_policies"`
+	SnapshotPolicies *SnapshotPolicy   `json:"snapshot_policies"`
 }
 
 // StorageUpdateRequest represents the body of a storage update request
