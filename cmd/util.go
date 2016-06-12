@@ -56,6 +56,8 @@ func Configure() error {
 	if conf != nil {
 		currentKey = conf.APIKEY
 		currentProjectID = conf.DefaultProjectID
+	} else {
+		conf = &Config{}
 	}
 
 	if currentKey != "" && len(currentKey) > 5 {
