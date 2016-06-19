@@ -92,7 +92,7 @@ type Snapshot struct {
 }
 
 type snapshotsRoot struct {
-	Snapshots []Snapshot `json:"shapshots"`
+	Snapshots []Snapshot `json:"snapshots"`
 }
 
 // CreateSnapShotRequest represents the body of a snapshot create request
