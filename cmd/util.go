@@ -65,7 +65,7 @@ func Configure() error {
 	}
 
 	if keySuffix != "" {
-		keySuffix = "*****" + keySuffix
+		keySuffix = "****************************" + keySuffix
 	}
 
 	// Get API key and default project ID from user
