@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"io/ioutil"
+
 	"github.com/spf13/cobra"
 )
 
@@ -37,18 +39,27 @@ var createDeviceCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new device",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		var userData string
 		projectID := GetProjectID(cmd)
 		hostname := cmd.Flag("hostname").Value.String()
 		plan := cmd.Flag("plan").Value.String()
 		facility := cmd.Flag("facility").Value.String()
 		osType := cmd.Flag("os-type").Value.String()
 		billing := cmd.Flag("billing").Value.String()
+		userDataFile := cmd.Flag("file").Value.String()
+		if userDataFile != "" {
+			data, err := ioutil.ReadFile(userDataFile)
+			if err != nil {
+				return err
+			}
+			userData = string(data)
+		}
 		// tags := cmd.Flag("tags").Value.String()
 		if silent {
-			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, []string{})
+			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, []string{})
 			return err
 		}
-		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, []string{})
+		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, []string{})
 		return err
 	},
 }
@@ -143,6 +154,7 @@ func init() {
 	createDeviceCmd.Flags().String("facility", "", "DC location. Available values are sjc1: Sunnyvale CA, ewr1: Parsippany NJ, ams1: Amsterdam NL")
 	createDeviceCmd.Flags().String("os-type", "centos_7", "Operating system to deploy to the server.")
 	createDeviceCmd.Flags().String("billing", "hourly", "Choose \"hourly\" or \"monthly\" billing.")
+	createDeviceCmd.Flags().StringP("file", "f", "", "Read userdata from a file.")
 	createDeviceCmd.Flags().BoolVarP(&silent, "silent", "s", false, "Omit provisioning logs")
 
 	// Flags for other device commands that require the device ID.

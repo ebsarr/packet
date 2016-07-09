@@ -151,7 +151,7 @@ func ListDevice(deviceID string) error {
 }
 
 // CreateDevice creates a new device
-func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle string, tags []string) error {
+func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -164,7 +164,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 		OS:           operatingSystem,
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
-		UserData:     "",
+		UserData:     userData,
 		Tags:         tags,
 	}
 
@@ -178,7 +178,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 }
 
 // CreateDeviceVerbose creates a new device and logs events till the device is provisionned
-func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle string, tags []string) error {
+func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -191,7 +191,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 		OS:           operatingSystem,
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
-		UserData:     "",
+		UserData:     userData,
 		Tags:         tags,
 	}
 
@@ -612,8 +612,8 @@ func CreateStorage(projectID, description, plan, facility, frequency string, siz
 
 	// Create a snapshot policy
 	sp := &extpackngo.SnapshotPolicy{
-		SnapshotFrequency:	frequency,
-		SnapshotCount:	count,
+		SnapshotFrequency: frequency,
+		SnapshotCount:     count,
 	}
 	request := &extpackngo.StorageCreateRequest{
 		Description:      description,
