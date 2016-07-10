@@ -198,3 +198,10 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 ## License
 [MIT](LICENSE)
+
+## Changelog
+
+| Version | Description |
+|---------|-------------|
+| 1.1     | Added support for userdata |
+| 1.0     | First version |
