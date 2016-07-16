@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"io/ioutil"
+
 	"github.com/spf13/cobra"
 )
 
@@ -34,9 +36,13 @@ var createSSHKeyCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Configure a new SSH key",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		key := cmd.Flag("ssh-key").Value.String()
+		keyFile := cmd.Flag("file").Value.String()
+		key, err := ioutil.ReadFile(keyFile)
+		if err != nil {
+			return err
+		}
 		label := cmd.Flag("label").Value.String()
-		err := CreateSSHKey(label, key)
+		err = CreateSSHKey(label, string(key))
 		return err
 	},
 }
@@ -56,9 +62,13 @@ var updateSSHKeyCmd = &cobra.Command{
 	Short: "Update a SSH key: change the key or its label",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		sshKeyID := cmd.Flag("key-id").Value.String()
-		key := cmd.Flag("ssh-key").Value.String()
+		keyFile := cmd.Flag("file").Value.String()
+		key, err := ioutil.ReadFile(keyFile)
+		if err != nil {
+			return err
+		}
 		label := cmd.Flag("label").Value.String()
-		err := UpdateSSHKey(sshKeyID, label, key)
+		err = UpdateSSHKey(sshKeyID, label, string(key))
 		return err
 	},
 }
@@ -73,7 +83,7 @@ func init() {
 
 	//Flags for command: packet ssh create
 	createSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
-	createSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
+	createSSHKeyCmd.Flags().StringP("file", "f", "", "Read public key from file.")
 
 	// Flags for command: packet ssh delete
 	deleteSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
@@ -81,5 +91,5 @@ func init() {
 	// Flags for command: packet ssh update
 	updateSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 	updateSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
-	updateSSHKeyCmd.Flags().String("ssh-key", "", "SSH key: public key to deploy to servers")
+	updateSSHKeyCmd.Flags().StringP("file", "f", "", "Read public key from file.")
 }

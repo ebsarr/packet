@@ -7,7 +7,7 @@ packet is a CLI tool to manage [packet.net](https://www.packet.net) services. Yo
 # Installation
 
 Install with `go get`
-```sh
+```
 $ go get -u github.com/ebsarr/packet
 ```
 `packet` executable will be installed in `$GOPATH/bin` or `$GOBIN`
@@ -25,6 +25,7 @@ Available Commands:
   IP              Manage device IP addresses
   configure       Set default configs for the packet cli.
   device          Manage your devices
+  list-profiles   List configured profiles
   list-facilities View a list of facilities(packet DCs)
   list-os         View available operating systems
   list-plans      View available plans.
@@ -33,8 +34,9 @@ Available Commands:
   storage         Manage your storages
 
 Flags:
-  -k, --key string   Specify the api key
-  -v, --version      Show version and exit
+  -k, --key string       Specify the api key
+  -p, --profile string   Specify profile name (default "default")
+  -v, --version          Show version and exit
 
 Use "packet [command] --help" for more information about a command.
 ```
@@ -43,17 +45,55 @@ Use "packet [command] --help" for more information about a command.
 
 ## Configure your API key
 Command syntax: `packet configure`
-```sh
+```
 $ packet configure
 Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
 **NOTE:** Without your API key configured, you'll need to specify it in every command in the form: `packet --key <APIKEY> <command> <subcommand> <flags>`. You can also optionnaly configure a default project ID.
 
+If you have multiple accounts, or if you are working on multiple projects, you can set profiles to make it easy to switch between accounts or projects. After setting multiple profiles, you can use `-p` or `--profile` option to switch between accounts and projects.
+
+### Setting a profile
+Here I'm creating a new profile named `ebsarr`
+```
+$ packet configure -p ebsarr
+Enter your API key [ *****y7wi ]: <APIKEY>
+Enter your default project ID [  ]: <Project ID>
+```
+Without the `-p` switch, the `configure` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
+```
+$ packet list-profiles
+NAME      	APIKEY                          	DEFAULT PROJECT
+----      	------                          	---------------
+default   	XMiR----------------------------	13935598-d08c-4bd8------------------
+ebsarr    	XMiR----------------------------	e30d25da-728d-47fe------------------
+```
+Now I can switch easily between projects when running the `packet` command:
+```
+$ packet -p ebsarr device listall
+[]
+```
+Without the `-p` option, the default profile will be used:
+```
+$ packet -p ebsarr device listall
+[
+    {
+        "id": "69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",
+        "href": "/devices/69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",
+        "hostname": "ebsarrtest01",
+        "state": "active",
+        "created_at": "2016-07-15T07:16:28Z",
+        "updated_at": "2016-07-15T07:31:27Z",
+        "billing_cycle": "hourly",
+        "ip_addresses": [
+...
+``` 
+
 ## Manage your projects
 
 ### Create a new project
-```sh
+```
 $ packet project create --name "My Brand New Project"
 {
     "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
@@ -64,7 +104,7 @@ $ packet project create --name "My Brand New Project"
 ```
 
 ### View all your projects
-```sh
+```
 $ packet project listall
 [
     {
@@ -75,7 +115,7 @@ $ packet project listall
 ...
 ```
 ### View project by ID
-```sh
+```
 $ packet project list --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
 {
     "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
@@ -88,7 +128,7 @@ $ packet project list --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
 ## Manage your devices
 
 ### Create a new device
-```sh
+```
 $ packet device create --project-id <Project ID>\
 	--billing hourly \
 	--facility ewr1\
@@ -115,7 +155,7 @@ Provisioning of device successfully started...
 ```
 
 ### View device by ID
-```sh
+```
 $ packet device list --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
 {
     "id": "2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
@@ -131,7 +171,7 @@ $ packet device list --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
 ## Managing SSH keys
 ### Create SSH key
 First generate the key
-```sh
+```
 $ ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/sarre27/.ssh/id_rsa): ./id_rsa
@@ -142,21 +182,11 @@ Your public key has been saved in bass2@packet/id_rsa.pub.
 The key fingerprint is:
 SHA256:YKBywX5luIx7B+bD1BCkG2kcia/KDuTwkA2If/GswGY sarre27@bdupc004.local
 The key's randomart image is:
-+---[RSA 2048]----+
-| ooo+o           |
-|+.o*o.o          |
-|=oOo.*o          |
-| X+oB=..         |
-|+oEB..o S        |
-|==.o=..          |
-|+....o           |
-|o.               |
-|..               |
-+----[SHA256]-----+
+...
 ```
 Register to packet
-```sh
-$ packet ssh create --label bass2@packet --ssh-key "$(cat id_rsa.pub)"
+```
+$ packet ssh create --label bass2@packet --file id_rsa.pub
 {
     "id": "02b76cb4-ebeb-4eee-8d5d-a6d744aa793b",
     "label": "bass2@packet",
@@ -172,7 +202,7 @@ $ packet ssh create --label bass2@packet --ssh-key "$(cat id_rsa.pub)"
 }
 ```
 ### View registerd SSH keys
-```sh
+```
 $ packet ssh listall
 [
     {
@@ -203,5 +233,7 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 | Version | Description |
 |---------|-------------|
-| 1.1     | Added support for userdata |
-| 1.0     | First version |
+| **1.2**     | - Added profile support: use `--profile` option to switch between profiles | 
+|         | - `ssh` command now reads keys from files, use `--file` instead of `ssh-key` to read from files.         |
+| **1.1**     | Added support for userdata |
+| **1.0**     | First version |

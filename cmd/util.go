@@ -20,10 +20,20 @@ const ConfigDir = ".packet"
 // ConfigFile is the filename of the config file
 const ConfigFile = "config"
 
+// Configs represents a set of profiles
+type Configs struct {
+	Profiles map[string]Config `json:"profiles"`
+}
+
 // Config represent default configurations
 type Config struct {
 	APIKEY           string `json:"APIKEY"`
 	DefaultProjectID string `json:"DEFAULT_PROJECT_ID"`
+}
+
+// String implements the Stringer interface for Config objects
+func String(c *Config) string {
+	return fmt.Sprintf("%s\t%s", c.APIKEY, c.DefaultProjectID)
 }
 
 // Configure prompts the user to configure a default API key
@@ -50,14 +60,25 @@ func Configure() error {
 	var currentProjectID string
 	var projectID string
 
+	// Get the profile name from CLI
+	profile := getProfile()
+
 	// Get the current key, create a suffix for hint.
 	// the current key shall not be displayed on the console
-	conf, _ := ReadConfigs()
-	if conf != nil {
-		currentKey = conf.APIKEY
-		currentProjectID = conf.DefaultProjectID
+	confs, _ := ReadConfigs()
+	var conf Config
+	if confs != nil {
+		if _, ok := confs.Profiles[profile]; ok {
+			conf = confs.Profiles[profile]
+			currentKey = conf.APIKEY
+			currentProjectID = conf.DefaultProjectID
+		} else {
+			conf = Config{}
+		}
 	} else {
-		conf = &Config{}
+		confs = &Configs{}
+		confs.Profiles = make(map[string]Config)
+		conf = Config{}
 	}
 
 	if currentKey != "" && len(currentKey) > 5 {
@@ -91,9 +112,11 @@ func Configure() error {
 		hasChanged = true
 	}
 
+	confs.Profiles[profile] = conf
+
 	if hasChanged {
 		// Write to config file
-		c, err := json.MarshalIndent(conf, "", "\t")
+		c, err := json.MarshalIndent(confs, "", "\t")
 		if err != nil {
 			return err
 		}
@@ -105,7 +128,7 @@ func Configure() error {
 }
 
 // ReadConfigs reads the current config file and returns a Config object
-func ReadConfigs() (*Config, error) {
+func ReadConfigs() (*Configs, error) {
 	u, err := user.Current()
 	if err != nil {
 		return nil, err
@@ -113,18 +136,49 @@ func ReadConfigs() (*Config, error) {
 
 	path := filepath.Join(u.HomeDir, ConfigDir, ConfigFile)
 
-	conf, err := ioutil.ReadFile(path)
+	confs, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	var c Config
-	e := json.Unmarshal(conf, &c)
+	var c Configs
+	e := json.Unmarshal(confs, &c)
 	if e != nil {
 		return nil, e
 	}
 
+	// For backward compatibility. This is not essential but will
+	// avoid errors after  upgrades from v1.1 to v1.2 and up
+	// If it happens that the c.Profiles is empty, we try to read the configs
+	// assuming the old format, and automatically make a new defualt profile
+	if len(c.Profiles) == 0 {
+		var defaultConf Config
+		defaultConfBytes, _ := ioutil.ReadFile(path)
+		json.Unmarshal(defaultConfBytes, &defaultConf)
+		if defaultConf.APIKEY != "" {
+			c.Profiles = make(map[string]Config)
+			c.Profiles["default"] = defaultConf
+			// Now write the profile in new format
+			newConfs, err := json.MarshalIndent(c, "", "\t")
+			if err != nil {
+				return nil, err
+			}
+			err = ioutil.WriteFile(path, newConfs, 0755)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	return &c, nil
+}
+
+func getProfile() string {
+	profile := RootCmd.Flag("profile").Value.String()
+	if profile == "" {
+		profile = "default"
+	}
+	return profile
 }
 
 // GetAPIKey returns either the default configured key or the one passed through the cli,
@@ -133,8 +187,9 @@ func GetAPIKey() (string, error) {
 
 	apiKey := RootCmd.Flag("key").Value.String()
 	if apiKey == "" {
-		config, _ := ReadConfigs()
-		apiKey = config.APIKEY
+		profile := getProfile()
+		configs, _ := ReadConfigs()
+		apiKey = configs.Profiles[profile].APIKEY
 	}
 
 	if apiKey == "" {
@@ -150,8 +205,9 @@ func GetProjectID(cmd *cobra.Command) string {
 	// The flag to pass a project ID shall always be "--project-id"
 	projectID := cmd.Flag("project-id").Value.String()
 	if projectID == "" {
-		config, _ := ReadConfigs()
-		projectID = config.DefaultProjectID
+		profile := getProfile()
+		configs, _ := ReadConfigs()
+		projectID = configs.Profiles[profile].DefaultProjectID
 	}
 
 	return projectID

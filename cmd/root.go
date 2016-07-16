@@ -37,6 +37,7 @@ func init() {
 
 	// Global flag for setting the API key.
 	RootCmd.PersistentFlags().StringP("key", "k", "", "Specify the api key")
+	RootCmd.PersistentFlags().StringP("profile", "p", "default", "Specify profile name")
 	RootCmd.PersistentFlags().BoolP("version", "v", false, "Show version and exit")
 }
 
