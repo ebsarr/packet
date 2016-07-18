@@ -63,7 +63,7 @@ Enter your default project ID [  ]: <Project ID>
 ```
 Without the `-p` switch, the `configure` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
 ```
-$ packet list-profiles
+$ packet profile list
 NAME      	APIKEY                          	DEFAULT PROJECT
 ----      	------                          	---------------
 default   	XMiR----------------------------	13935598-d08c-4bd8------------------
@@ -76,7 +76,7 @@ $ packet -p ebsarr device listall
 ```
 Without the `-p` option, the default profile will be used:
 ```
-$ packet -p ebsarr device listall
+$ packet device listall
 [
     {
         "id": "69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",

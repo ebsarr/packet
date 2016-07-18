@@ -22,7 +22,7 @@ const ConfigFile = "config"
 
 // Configs represents a set of profiles
 type Configs struct {
-	Profiles map[string]Config `json:"profiles"`
+	Profiles map[string]*Config `json:"profiles"`
 }
 
 // Config represent default configurations
@@ -31,24 +31,8 @@ type Config struct {
 	DefaultProjectID string `json:"DEFAULT_PROJECT_ID"`
 }
 
-// String implements the Stringer interface for Config objects
-func String(c *Config) string {
-	return fmt.Sprintf("%s\t%s", c.APIKEY, c.DefaultProjectID)
-}
-
 // Configure prompts the user to configure a default API key
 func Configure() error {
-	u, err := user.Current()
-	if err != nil {
-		return err
-	}
-
-	// create directory to save configs
-	dirPath := filepath.Join(u.HomeDir, ConfigDir)
-	filePath := filepath.Join(dirPath, ConfigFile)
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		os.Mkdir(dirPath, 0755)
-	}
 
 	// Modify to true if user changes the config
 	var hasChanged bool
@@ -66,19 +50,19 @@ func Configure() error {
 	// Get the current key, create a suffix for hint.
 	// the current key shall not be displayed on the console
 	confs, _ := ReadConfigs()
-	var conf Config
+	var conf *Config
 	if confs != nil {
 		if _, ok := confs.Profiles[profile]; ok {
 			conf = confs.Profiles[profile]
 			currentKey = conf.APIKEY
 			currentProjectID = conf.DefaultProjectID
 		} else {
-			conf = Config{}
+			conf = &Config{}
 		}
 	} else {
 		confs = &Configs{}
-		confs.Profiles = make(map[string]Config)
-		conf = Config{}
+		confs.Profiles = make(map[string]*Config)
+		conf = &Config{}
 	}
 
 	if currentKey != "" && len(currentKey) > 5 {
@@ -116,12 +100,7 @@ func Configure() error {
 
 	if hasChanged {
 		// Write to config file
-		c, err := json.MarshalIndent(confs, "", "\t")
-		if err != nil {
-			return err
-		}
-		e := ioutil.WriteFile(filePath, c, 0755)
-		return e
+		writeConfigFile(confs)
 	}
 
 	return nil
@@ -129,22 +108,9 @@ func Configure() error {
 
 // ReadConfigs reads the current config file and returns a Config object
 func ReadConfigs() (*Configs, error) {
-	u, err := user.Current()
+	c, err := readConfigFile()
 	if err != nil {
 		return nil, err
-	}
-
-	path := filepath.Join(u.HomeDir, ConfigDir, ConfigFile)
-
-	confs, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-
-	var c Configs
-	e := json.Unmarshal(confs, &c)
-	if e != nil {
-		return nil, e
 	}
 
 	// For backward compatibility. This is not essential but will
@@ -152,33 +118,22 @@ func ReadConfigs() (*Configs, error) {
 	// If it happens that the c.Profiles is empty, we try to read the configs
 	// assuming the old format, and automatically make a new defualt profile
 	if len(c.Profiles) == 0 {
-		var defaultConf Config
-		defaultConfBytes, _ := ioutil.ReadFile(path)
-		json.Unmarshal(defaultConfBytes, &defaultConf)
+		defaultConf, err := readOldConfigFile()
+		if err != nil {
+			return nil, err
+		}
 		if defaultConf.APIKEY != "" {
-			c.Profiles = make(map[string]Config)
+			c.Profiles = make(map[string]*Config)
 			c.Profiles["default"] = defaultConf
 			// Now write the profile in new format
-			newConfs, err := json.MarshalIndent(c, "", "\t")
-			if err != nil {
-				return nil, err
-			}
-			err = ioutil.WriteFile(path, newConfs, 0755)
+			err := writeConfigFile(c)
 			if err != nil {
 				return nil, err
 			}
 		}
 	}
 
-	return &c, nil
-}
-
-func getProfile() string {
-	profile := RootCmd.Flag("profile").Value.String()
-	if profile == "" {
-		profile = "default"
-	}
-	return profile
+	return c, nil
 }
 
 // GetAPIKey returns either the default configured key or the one passed through the cli,
@@ -222,4 +177,79 @@ func MarshallAndPrint(v interface{}) error {
 	}
 	fmt.Printf("%s\n", string(b))
 	return nil
+}
+
+// Helper functions
+
+func getProfile() string {
+	profile := RootCmd.Flag("profile").Value.String()
+	if profile == "" {
+		profile = "default"
+	}
+	return profile
+}
+
+func readConfigFile() (*Configs, error) {
+	u, err := user.Current()
+	if err != nil {
+		return nil, err
+	}
+
+	path := filepath.Join(u.HomeDir, ConfigDir, ConfigFile)
+
+	confs, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var c Configs
+	err = json.Unmarshal(confs, &c)
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+func readOldConfigFile() (*Config, error) {
+	u, err := user.Current()
+	if err != nil {
+		return nil, err
+	}
+
+	path := filepath.Join(u.HomeDir, ConfigDir, ConfigFile)
+
+	confs, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var c Config
+	err = json.Unmarshal(confs, &c)
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+func writeConfigFile(c *Configs) error {
+	u, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	// create directory to save configs
+	dirPath := filepath.Join(u.HomeDir, ConfigDir)
+	filePath := filepath.Join(dirPath, ConfigFile)
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		os.Mkdir(dirPath, 0755)
+	}
+
+	cBytes, err := json.MarshalIndent(c, "", "\t")
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filePath, cBytes, 0755)
+	return err
 }
