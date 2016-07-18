@@ -25,7 +25,7 @@ Available Commands:
   IP              Manage device IP addresses
   configure       Set default configs for the packet cli.
   device          Manage your devices
-  list-profiles   List configured profiles
+  profile         Manage your profiles
   list-facilities View a list of facilities(packet DCs)
   list-os         View available operating systems
   list-plans      View available plans.
