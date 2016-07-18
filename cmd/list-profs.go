@@ -27,8 +27,10 @@ var listProfsCmd = &cobra.Command{
 				fmt.Printf("%-10s\t%s\n", name, conf)
 			}
 		}
-		for profile, conf := range confs.Profiles {
-			fmt.Printf("%-10s\t%s\n", profile, conf)
+		if confs != nil {
+			for profile, conf := range confs.Profiles {
+				fmt.Printf("%-10s\t%s\n", profile, conf)
+			}
 		}
 	},
 }

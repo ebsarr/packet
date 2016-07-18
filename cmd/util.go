@@ -147,7 +147,10 @@ func GetAPIKey() (string, error) {
 	apiKey := RootCmd.Flag("key").Value.String()
 	if apiKey == "" {
 		profile := getProfile()
-		configs, _ := ReadConfigs()
+		configs, err := ReadConfigs()
+		if err != nil {
+			return apiKey, err
+		}
 		if _, found := configs.Profiles[profile]; found {
 			apiKey = configs.Profiles[profile].APIKEY
 		}
@@ -155,7 +158,7 @@ func GetAPIKey() (string, error) {
 
 	if apiKey == "" {
 		// API Key was neither configured, neither passed through the cli
-		return apiKey, errors.New("API key is missing\nConfigure a default one with \"packet configure\", or specify with the --key flag")
+		return apiKey, errors.New("API key is missing\nConfigure your credentials with `packet configure`, or use the `--key` flag")
 	}
 
 	return apiKey, nil
@@ -167,7 +170,10 @@ func GetProjectID(cmd *cobra.Command) string {
 	projectID := cmd.Flag("project-id").Value.String()
 	if projectID == "" {
 		profile := getProfile()
-		configs, _ := ReadConfigs()
+		configs, err := ReadConfigs()
+		if err != nil {
+			return projectID
+		}
 		if _, found := configs.Profiles[profile]; found {
 			projectID = configs.Profiles[profile].DefaultProjectID
 		}
@@ -207,7 +213,7 @@ func readConfigFile() (*Configs, error) {
 
 	confs, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("API key is missing\nConfigure your credentials with `packet configure`, or use the `--key` flag")
 	}
 
 	var c Configs
