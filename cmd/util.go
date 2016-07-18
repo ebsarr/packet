@@ -31,6 +31,10 @@ type Config struct {
 	DefaultProjectID string `json:"DEFAULT_PROJECT_ID"`
 }
 
+func (c *Config) String() string {
+	return fmt.Sprintf("%-32s\t%s", c.APIKEY, c.DefaultProjectID)
+}
+
 // Configure prompts the user to configure a default API key
 func Configure() error {
 

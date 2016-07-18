@@ -23,12 +23,12 @@ var listProfsCmd = &cobra.Command{
 		fmt.Printf("%-10s\t%-32s\t%s\n", "----", "------", "---------------")
 		confs, _ := ReadConfigs()
 		if name != "" {
-			if conf, ok := confs.Profiles[name]; ok {
-				fmt.Printf("%-10s\t%-32s\t%s\n", name, conf.APIKEY, conf.DefaultProjectID)
+			if conf, found := confs.Profiles[name]; found {
+				fmt.Printf("%-10s\t%s\n", name, conf)
 			}
 		}
 		for profile, conf := range confs.Profiles {
-			fmt.Printf("%-10s\t%-32s\t%s\n", profile, conf.APIKEY, conf.DefaultProjectID)
+			fmt.Printf("%-10s\t%s\n", profile, conf)
 		}
 	},
 }
