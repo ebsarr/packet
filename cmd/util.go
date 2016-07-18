@@ -42,11 +42,7 @@ func Configure() error {
 	var hasChanged bool
 
 	// Declare values for user prompt
-	var newKey string
-	var currentKey string
-	var keySuffix string
-	var currentProjectID string
-	var projectID string
+	var newKey, currentKey, keySuffix, currentProjectID, projectID string
 
 	// Get the profile name from CLI
 	profile := getProfile()
