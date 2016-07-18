@@ -233,6 +233,7 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 | Version | Description |
 |---------|-------------|
+| **1.3**     | - Can now delete profiles |
 | **1.2**     | - Added profile support: use `--profile` option to switch between profiles | 
 |         | - `ssh` command now reads keys from files, use `--file` instead of `ssh-key` to read from files.         |
 | **1.1**     | Added support for userdata |
