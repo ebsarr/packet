@@ -148,7 +148,9 @@ func GetAPIKey() (string, error) {
 	if apiKey == "" {
 		profile := getProfile()
 		configs, _ := ReadConfigs()
-		apiKey = configs.Profiles[profile].APIKEY
+		if _, found := configs.Profiles[profile]; found {
+			apiKey = configs.Profiles[profile].APIKEY
+		}
 	}
 
 	if apiKey == "" {
@@ -166,7 +168,9 @@ func GetProjectID(cmd *cobra.Command) string {
 	if projectID == "" {
 		profile := getProfile()
 		configs, _ := ReadConfigs()
-		projectID = configs.Profiles[profile].DefaultProjectID
+		if _, found := configs.Profiles[profile]; found {
+			projectID = configs.Profiles[profile].DefaultProjectID
+		}
 	}
 
 	return projectID
