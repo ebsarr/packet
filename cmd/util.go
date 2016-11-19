@@ -154,7 +154,7 @@ func GetAPIKey() (string, error) {
 
 	if apiKey == "" {
 		// API Key was neither configured, neither passed through the cli
-		return apiKey, errors.New("API key is missing\nConfigure your credentials with `packet configure`, or use the `--key` flag")
+		return apiKey, errors.New("API key is missing\nConfigure a profile with `packet admin add-profile`, or use the `--key` flag")
 	}
 
 	return apiKey, nil
@@ -209,7 +209,7 @@ func readConfigFile() (*Configs, error) {
 
 	confs, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, errors.New("API key is missing\nConfigure your credentials with `packet configure`, or use the `--key` flag")
+		return nil, errors.New("API key is missing\nConfigure a profile with `packet admin add-profile`, or use the `--key` flag")
 	}
 
 	var c Configs
