@@ -1,18 +1,17 @@
 package cmd
 
-import (
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
-// IPCmd represents the IP command
-var IPCmd = &cobra.Command{
-	Use:   "IP",
-	Short: "Manage device IP addresses",
+// networkCmd represents the network command
+var networkCmd = &cobra.Command{
+	Use:   "network",
+	Short: "Manage packet network services",
+	// Long: ``,
 }
 
 var listIPCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Prints out IP address by ID",
+	Use:   "list-ip",
+	Short: "Retrieve IP address by ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		addressID := cmd.Flag("address-id").Value.String()
 		err := ListIPAddress(addressID)
@@ -21,8 +20,8 @@ var listIPCmd = &cobra.Command{
 }
 
 var assignIPCmd = &cobra.Command{
-	Use:   "assign",
-	Short: "Assign an IP address to a device by ID",
+	Use:   "assign-ip",
+	Short: "Assign IP address to a device by ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address := cmd.Flag("address").Value.String()
 		deviceID := cmd.Flag("device-id").Value.String()
@@ -32,8 +31,8 @@ var assignIPCmd = &cobra.Command{
 }
 
 var unAssignIPCmd = &cobra.Command{
-	Use:   "unassign",
-	Short: "Unassign an IP address from a device",
+	Use:   "unassign-ip",
+	Short: "Unassign IP address from a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		addressID := cmd.Flag("address-id").Value.String()
 		err := UnAssignIPAddress(addressID)
@@ -42,8 +41,8 @@ var unAssignIPCmd = &cobra.Command{
 }
 
 var listReservationsCmd = &cobra.Command{
-	Use:   "list-reservations",
-	Short: "Print out a list of IP resevations for a single project",
+	Use:   "list-ip-reservations",
+	Short: "Retrieve IP resevations for a single project",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
 		err := ListIPReservations(projectID)
@@ -52,8 +51,8 @@ var listReservationsCmd = &cobra.Command{
 }
 
 var requestMoreIPReservationsCmd = &cobra.Command{
-	Use:   "request-more",
-	Short: "Request more IP space for a project in order to have additional IP addresses to assign to devices",
+	Use:   "request-more-ip-reservations",
+	Short: "Request more IP space",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
 		ipType := cmd.Flag("type").Value.String()
@@ -69,8 +68,8 @@ var requestMoreIPReservationsCmd = &cobra.Command{
 }
 
 var listReservationCmd = &cobra.Command{
-	Use:   "list-reservation",
-	Short: "Print out a single IP reservation object by ID",
+	Use:   "list-ip-reservation",
+	Short: "Retrieve a single IP reservation object by ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		reservationID := cmd.Flag("reservation-id").Value.String()
 		err := ListIPReservations(reservationID)
@@ -79,8 +78,8 @@ var listReservationCmd = &cobra.Command{
 }
 
 var removeReservationCmd = &cobra.Command{
-	Use:   "remove-reservation",
-	Short: "Remove an IP reservation from the project",
+	Use:   "remove-ip-reservation",
+	Short: "Remove IP reservation",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		reservationID := cmd.Flag("reservation-id").Value.String()
 		err := RemoveIPReservation(reservationID)
@@ -89,8 +88,8 @@ var removeReservationCmd = &cobra.Command{
 }
 
 func init() {
-	IPCmd.AddCommand(listIPCmd, assignIPCmd, unAssignIPCmd, listReservationsCmd, listReservationCmd, requestMoreIPReservationsCmd, removeReservationCmd)
-	RootCmd.AddCommand(IPCmd)
+	networkCmd.AddCommand(listIPCmd, assignIPCmd, unAssignIPCmd, listReservationsCmd, listReservationCmd, requestMoreIPReservationsCmd, removeReservationCmd)
+	RootCmd.AddCommand(networkCmd)
 
 	// Flags for command: packet IP list
 	listIPCmd.Flags().String("address-id", "", "IP address ID")
@@ -116,4 +115,5 @@ func init() {
 	requestMoreIPReservationsCmd.Flags().String("type", "public_ipv4", "public_ipv4 || global_ipv4")
 	requestMoreIPReservationsCmd.Flags().String("comments", "", "Comment to Packet team")
 	requestMoreIPReservationsCmd.Flags().Int("quantity", 1, "How many IPv4 you want to request. Options: 1, 2, 4, 8, 16, 32, 64, 128, 256")
+
 }

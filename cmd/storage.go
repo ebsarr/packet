@@ -11,8 +11,8 @@ var storageCmd = &cobra.Command{
 }
 
 var listStoragesCmd = &cobra.Command{
-	Use:   "listall",
-	Short: "View your volumes",
+	Use:   "list-volumes",
+	Short: "Retrieve all volumes",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
 		err := ListStorages(projectID)
@@ -21,7 +21,7 @@ var listStoragesCmd = &cobra.Command{
 }
 
 var createStorageCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "create-volume",
 	Short: "Create a volume",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
@@ -43,8 +43,8 @@ var createStorageCmd = &cobra.Command{
 }
 
 var listStorageCmd = &cobra.Command{
-	Use:   "list",
-	Short: "View volume by ID",
+	Use:   "list-volume",
+	Short: "Retrieve a volume by ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		storageID := cmd.Flag("storage-id").Value.String()
 		err := ListStorage(storageID)
@@ -53,8 +53,8 @@ var listStorageCmd = &cobra.Command{
 }
 
 var updateStorageCmd = &cobra.Command{
-	Use:   "update",
-	Short: "Update volume",
+	Use:   "update-volume",
+	Short: "Update a volume",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		storageID := cmd.Flag("storage-id").Value.String()
 		description := cmd.Flag("desc").Value.String()
@@ -72,7 +72,7 @@ var updateStorageCmd = &cobra.Command{
 }
 
 var deleteStorageCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete-volume",
 	Short: "Delete storage",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		storageID := cmd.Flag("storage-id").Value.String()
@@ -153,7 +153,7 @@ var deleteSnapshotCmd = &cobra.Command{
 }
 
 var listStorageEventsCmd = &cobra.Command{
-	Use:   "list-events",
+	Use:   "list-volume-events",
 	Short: "View a list of the current volume's events",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		storageID := cmd.Flag("storage-id").Value.String()
@@ -164,8 +164,8 @@ var listStorageEventsCmd = &cobra.Command{
 }
 
 var attachStorageCmd = &cobra.Command{
-	Use:   "attach",
-	Short: "Attach your storage to a device",
+	Use:   "attach-volume",
+	Short: "Attach a volume to a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		storageID := cmd.Flag("storage-id").Value.String()
 		snapshotID := cmd.Flag("snapshot-id").Value.String()
@@ -176,8 +176,8 @@ var attachStorageCmd = &cobra.Command{
 }
 
 var detachStorageCmd = &cobra.Command{
-	Use:   "detach",
-	Short: "Detach your storage from a device",
+	Use:   "detach-volume",
+	Short: "Detach a volume from a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		attachmentID := cmd.Flag("attachement-id").Value.String()
 		err := DetachStorage(attachmentID)

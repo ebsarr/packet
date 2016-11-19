@@ -8,16 +8,16 @@ import (
 
 var silent bool
 
-// deviceCmd represents the device command
-var deviceCmd = &cobra.Command{
-	Use:   "device",
-	Short: "Manage your devices",
-	//Long: ``,
+// baremetalCmd represents the baremetal command
+var baremetalCmd = &cobra.Command{
+	Use:   "baremetal",
+	Short: "Manage server devices.",
+	// Long: ``,
 }
 
 var listDevicesCmd = &cobra.Command{
-	Use:   "listall",
-	Short: "Print out all devices in a project",
+	Use:   "list-devices",
+	Short: "Retrieve all devices in a project",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
 		err := ListDevices(projectID)
@@ -26,8 +26,8 @@ var listDevicesCmd = &cobra.Command{
 }
 
 var listDeviceCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Print out device info for the given device ID.",
+	Use:   "list-device",
+	Short: "Retrieve a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := ListDevice(deviceID)
@@ -36,7 +36,7 @@ var listDeviceCmd = &cobra.Command{
 }
 
 var createDeviceCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "create-device",
 	Short: "Create a new device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var userData string
@@ -65,8 +65,8 @@ var createDeviceCmd = &cobra.Command{
 }
 
 var deleteDeviceCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "Delete device",
+	Use:   "delete-device",
+	Short: "Delete a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := DeleteDevice(deviceID)
@@ -75,8 +75,8 @@ var deleteDeviceCmd = &cobra.Command{
 }
 
 var lockDeviceCmd = &cobra.Command{
-	Use:   "lock",
-	Short: "Lock device",
+	Use:   "lock-device",
+	Short: "Lock a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := LockDevice(deviceID)
@@ -85,8 +85,8 @@ var lockDeviceCmd = &cobra.Command{
 }
 
 var unlockDeviceCmd = &cobra.Command{
-	Use:   "unlock",
-	Short: "Unlock device",
+	Use:   "unlock-device",
+	Short: "Unlock a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := UnlockDevice(deviceID)
@@ -95,8 +95,8 @@ var unlockDeviceCmd = &cobra.Command{
 }
 
 var powerOnDeviceCmd = &cobra.Command{
-	Use:   "power-on",
-	Short: "Power on device",
+	Use:   "poweron-device",
+	Short: "Power on a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := PowerOnDevice(deviceID)
@@ -105,8 +105,8 @@ var powerOnDeviceCmd = &cobra.Command{
 }
 
 var powerOffDeviceCmd = &cobra.Command{
-	Use:   "power-off",
-	Short: "Power off device",
+	Use:   "poweroff-device",
+	Short: "Power off a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := PowerOffDevice(deviceID)
@@ -115,8 +115,8 @@ var powerOffDeviceCmd = &cobra.Command{
 }
 
 var rebootDeviceCmd = &cobra.Command{
-	Use:   "reboot",
-	Short: "Reboot device",
+	Use:   "reboot-device",
+	Short: "Reboot a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		deviceID := cmd.Flag("device-id").Value.String()
 		err := RebootDevice(deviceID)
@@ -135,11 +135,11 @@ var listDeviceEventsCmd = &cobra.Command{
 }
 
 func init() {
-	// Subcommands
-	deviceCmd.AddCommand(listDevicesCmd, listDeviceCmd, createDeviceCmd, deleteDeviceCmd, lockDeviceCmd, unlockDeviceCmd, powerOnDeviceCmd, powerOffDeviceCmd, rebootDeviceCmd, listDeviceEventsCmd)
+	// subcommands
+	baremetalCmd.AddCommand(listDevicesCmd, listDeviceCmd, createDeviceCmd, deleteDeviceCmd, lockDeviceCmd, unlockDeviceCmd, powerOnDeviceCmd, powerOffDeviceCmd, rebootDeviceCmd, listDeviceEventsCmd)
 
-	// add command to root
-	RootCmd.AddCommand(deviceCmd)
+	// add to root command
+	RootCmd.AddCommand(baremetalCmd)
 
 	// Flags for command: packet device listall
 	listDevicesCmd.Flags().String("project-id", "", "Specify the project ID.")
@@ -165,4 +165,5 @@ func init() {
 	powerOffDeviceCmd.Flags().String("device-id", "", "Device ID")
 	rebootDeviceCmd.Flags().String("device-id", "", "Device ID")
 	listDeviceEventsCmd.Flags().String("device-id", "", "Device ID")
+
 }

@@ -18,7 +18,8 @@ var RootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		showVersion, _ := cmd.Flags().GetBool("version")
 		if showVersion {
-			fmt.Printf("packet v%s\n", version)
+			// fmt.Printf("packet v%s\n", version)
+			fmt.Printf("%s\n", version)
 		}
 	},
 }
