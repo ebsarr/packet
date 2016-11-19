@@ -1,20 +1,23 @@
-## packet storage delete-snapshot-policy
+## packet storage update-volume
 
-Delete a snapshot policy
+Update a volume
 
 ### Synopsis
 
 
-Delete a snapshot policy
+Update a volume
 
 ```
-packet storage delete-snapshot-policy
+packet storage update-volume
 ```
 
 ### Options
 
 ```
-      --policy-id string   Snapshot policy ID
+      --desc string         Description
+      --lock                Update and lock
+      --size int            Volume size (default 120)
+      --storage-id string   Storage ID
 ```
 
 ### Options inherited from parent commands

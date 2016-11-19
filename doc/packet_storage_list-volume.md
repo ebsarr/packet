@@ -1,20 +1,20 @@
-## packet storage delete-snapshot-policy
+## packet storage list-volume
 
-Delete a snapshot policy
+Retrieve a volume by ID
 
 ### Synopsis
 
 
-Delete a snapshot policy
+Retrieve a volume by ID
 
 ```
-packet storage delete-snapshot-policy
+packet storage list-volume
 ```
 
 ### Options
 
 ```
-      --policy-id string   Snapshot policy ID
+      --storage-id string   Storage ID
 ```
 
 ### Options inherited from parent commands

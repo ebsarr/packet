@@ -1,20 +1,21 @@
-## packet storage delete-snapshot-policy
+## packet storage list-volume-events
 
-Delete a snapshot policy
+View a list of the current volume's events
 
 ### Synopsis
 
 
-Delete a snapshot policy
+View a list of the current volume's events
 
 ```
-packet storage delete-snapshot-policy
+packet storage list-volume-events
 ```
 
 ### Options
 
 ```
-      --policy-id string   Snapshot policy ID
+      --snapshot-id string   Snapshot policy ID
+      --storage-id string    Storage ID
 ```
 
 ### Options inherited from parent commands

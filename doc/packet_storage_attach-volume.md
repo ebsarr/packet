@@ -1,20 +1,22 @@
-## packet storage delete-snapshot-policy
+## packet storage attach-volume
 
-Delete a snapshot policy
+Attach a volume to a device
 
 ### Synopsis
 
 
-Delete a snapshot policy
+Attach a volume to a device
 
 ```
-packet storage delete-snapshot-policy
+packet storage attach-volume
 ```
 
 ### Options
 
 ```
-      --policy-id string   Snapshot policy ID
+      --device-id string     Device ID
+      --snapshot-id string   Snapshot policy ID
+      --storage-id string    Storage ID
 ```
 
 ### Options inherited from parent commands
