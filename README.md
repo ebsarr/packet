@@ -58,6 +58,7 @@ Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
 This command will add a profile named "default".
+<br>
 **NOTE:** Without your API key configured, you'll need to specify it in every command in the form: `packet --key <APIKEY> <command> <subcommand> <flags>`. You can also optionnaly configure a default project ID.
 
 If you have multiple accounts, or if you are working on multiple projects, you can set profiles to make it easy to switch between accounts or projects. After setting multiple profiles, you can use `-p` or `--profile` option to switch between accounts and projects.
