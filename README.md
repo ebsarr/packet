@@ -1,8 +1,21 @@
 # packet, a CLI tool to manage Packet services
+[![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet)
 
 packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet)
+        .--~~~~~~~~~~~~~------.
+       /--===============------\\
+       | |^^^^^^^^^^^^^^^|     |
+       | |               |     |
+       | | > packet v2.0 |     |
+       | |               |     |
+       | |_______________|     |
+       |                   ::::|
+       '======================='
+       //-"-"-"-"-"-"-"-"-"-"-\\\\
+      //_"_"_"_"_"_"_"_"_"_"_"_\\\\
+      [-------------------------]
+      \\_________________________/
 
 # Installation
 
