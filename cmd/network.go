@@ -91,26 +91,26 @@ func init() {
 	networkCmd.AddCommand(listIPCmd, assignIPCmd, unAssignIPCmd, listReservationsCmd, listReservationCmd, requestMoreIPReservationsCmd, removeReservationCmd)
 	RootCmd.AddCommand(networkCmd)
 
-	// Flags for command: packet IP list
+	// Flags for command: packet network list-ip
 	listIPCmd.Flags().String("address-id", "", "IP address ID")
 
-	// Flags for command: packet IP assign
+	// Flags for command: packet network assign-ip
 	assignIPCmd.Flags().String("address", "", "IP address.(format: x.x.x.x/y)")
 	assignIPCmd.Flags().String("device-id", "", "ID of device to assign to")
 
-	// Flags for command: packet IP unassign
+	// Flags for command: packet network unassign-ip
 	unAssignIPCmd.Flags().String("address-id", "", "IP address ID")
 
-	// Flags for command: packet IP list-reservations
+	// Flags for command: packet netowrk list-ip-reservations
 	listReservationsCmd.Flags().String("project-id", "", "Project ID")
 
-	// Flags for command: packet IP list-reservation
+	// Flags for command: packet network list-ip-reservation
 	listReservationCmd.Flags().String("reservation-id", "", "Reservation ID")
 
-	// Flags for command: packet IP remove-reservation
+	// Flags for command: packet network remove-ip-reservation
 	removeReservationCmd.Flags().String("reservation-id", "", "Reservation ID")
 
-	// Flags for command: packet IP request-more
+	// Flags for command: packet network request-more
 	requestMoreIPReservationsCmd.Flags().String("project-id", "", "Project ID")
 	requestMoreIPReservationsCmd.Flags().String("type", "public_ipv4", "public_ipv4 || global_ipv4")
 	requestMoreIPReservationsCmd.Flags().String("comments", "", "Comment to Packet team")

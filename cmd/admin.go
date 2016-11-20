@@ -238,35 +238,35 @@ func init() {
 	listProfilesCmd.Flags().StringP("name", "n", "", "Profile name")
 	deleteProfileCmd.Flags().StringP("name", "n", "", "Profile name")
 
-	// Flags for command: packet project list
+	// Flags for command: packet admin list-project
 	listProjectCmd.Flags().String("project-id", "", "Project ID")
 
-	// Flags for command: packet project create
+	// Flags for command: packet admin create-project
 	createProjectCmd.Flags().String("name", "", "Project name")
 	createProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
 
-	// Flags for command: packet project delete
+	// Flags for command: packet admin delete-project
 	deleteProjectCmd.Flags().String("project-id", "", "Project ID")
 
-	// Flags for command: packet project update
+	// Flags for command: packet admin update-project
 	updateProjectCmd.Flags().String("project-id", "", "Project ID")
 	updateProjectCmd.Flags().String("name", "", "Project name")
 	updateProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
 
-	// Flags for command: packet project list-events
+	// Flags for command: packet admin list-project-events
 	listProjectEventsCmd.Flags().String("project-id", "", "Project ID")
 
-	// Flags for command: packet ssh list
+	// Flags for command: packet admin list-sshkeys
 	listSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 
-	//Flags for command: packet ssh create
+	//Flags for command: packet admin create-sshkey
 	createSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
 	createSSHKeyCmd.Flags().StringP("file", "f", "", "Read public key from file.")
 
-	// Flags for command: packet ssh delete
+	// Flags for command: packet admin delete-sshkey
 	deleteSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 
-	// Flags for command: packet ssh update
+	// Flags for command: packet admin update-sshkey
 	updateSSHKeyCmd.Flags().String("key-id", "", "SSH key ID")
 	updateSSHKeyCmd.Flags().String("label", "", "Label to assign to the key")
 	updateSSHKeyCmd.Flags().StringP("file", "f", "", "Read public key from file.")

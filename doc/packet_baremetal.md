@@ -10,12 +10,12 @@ Manage server devices.
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO
-* [packet](packet.md)	 - A unified tool to manage your packet services
+* [packet](packet.md)	 - CLI tool to manage packet.net services
 * [packet baremetal create-device](packet_baremetal_create-device.md)	 - Create a new device
 * [packet baremetal delete-device](packet_baremetal_delete-device.md)	 - Delete a device
 * [packet baremetal list-device](packet_baremetal_list-device.md)	 - Retrieve a device

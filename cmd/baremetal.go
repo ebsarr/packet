@@ -141,10 +141,10 @@ func init() {
 	// add to root command
 	RootCmd.AddCommand(baremetalCmd)
 
-	// Flags for command: packet device listall
+	// Flags for command: packet baremetal list-devices
 	listDevicesCmd.Flags().String("project-id", "", "Specify the project ID.")
 
-	// Flags for command: packet device list
+	// Flags for command: packet baremetal list-device
 	listDeviceCmd.Flags().String("device-id", "", "Specify ID of device to display.")
 
 	// Flags for command: packet device create

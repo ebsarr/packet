@@ -21,8 +21,8 @@ packet admin create-project
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO

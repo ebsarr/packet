@@ -18,10 +18,12 @@ type StorageService interface {
 	CreateSnapshotPolicy(storageID string, request *CreateSnapshotPolicyRequest) (*Response, error)
 	UpdateSnapshotPolicy(snapshotPolicyID string, request *UpdateSnapshotPolicyRequest) (*Response, error)
 	DeleteSnapshotPolicy(snapshotPolicyID string) (*Response, error)
-	ListSnapshots(snapshotPolicyID string) ([]Snapshot, *Response, error)
-	CreateSnapshot(snapshotPolicyID string, request *CreateSnapShotRequest) (*Response, error)
+	ListSnapshots(storageID string) ([]Snapshot, *Response, error)
+	CreateSnapshot(storageID string, request *CreateSnapShotRequest) (*Response, error)
 	DeleteSnapshot(storageID, snapshotID string) (*Response, error)
-	Attach(storageID, snapshotID string, request *AttachStorageRequest) (*Response, error)
+	Restore(storageID string, request *RestoreVolumeRequest) (*Response, error)
+	Clone(storageID string, request *CloneVolumeRequest) (*Response, error)
+	Attach(storageID string, request *AttachStorageRequest) (*Response, error)
 	Detach(attachmentID string) (*Response, error)
 }
 
@@ -102,6 +104,16 @@ type CreateSnapShotRequest struct {
 // AttachStorageRequest represents the body of a attach storage request
 type AttachStorageRequest struct {
 	DeviceID string `json:"device_id"`
+}
+
+// RestoreVolumeRequest represents the body of a restore request
+type RestoreVolumeRequest struct {
+	RestorePoint string `json:"restore_point"`
+}
+
+// CloneVolumeRequest represents the body of a restore request
+type CloneVolumeRequest struct {
+	SnapshotTimestamp string `json:"snapshot_timestamp,omitempty"`
 }
 
 type volumesRoot struct {
@@ -248,8 +260,8 @@ func (s *StorageServiceOP) DeleteSnapshotPolicy(snapshotPolicyID string) (*Respo
 }
 
 // ListSnapshots returns a list of the current volume’s snapshots
-func (s *StorageServiceOP) ListSnapshots(snapshotPolicyID string) ([]Snapshot, *Response, error) {
-	path := fmt.Sprintf("%s/snapshot-policies/%s", storageBasePath, snapshotPolicyID)
+func (s *StorageServiceOP) ListSnapshots(storageID string) ([]Snapshot, *Response, error) {
+	path := fmt.Sprintf("%s/%s/snapshots", storageBasePath, storageID)
 
 	req, err := s.client.NewRequest("GET", path, nil)
 	if err != nil {
@@ -266,8 +278,8 @@ func (s *StorageServiceOP) ListSnapshots(snapshotPolicyID string) ([]Snapshot, *
 }
 
 // CreateSnapshot creates a new snapshot of your volume
-func (s *StorageServiceOP) CreateSnapshot(snapshotPolicyID string, request *CreateSnapShotRequest) (*Response, error) {
-	path := fmt.Sprintf("%s/snapshot-policies/%s", storageBasePath, snapshotPolicyID)
+func (s *StorageServiceOP) CreateSnapshot(storageID string, request *CreateSnapShotRequest) (*Response, error) {
+	path := fmt.Sprintf("%s/%s/snapshots", storageBasePath, storageID)
 
 	req, err := s.client.NewRequest("POST", path, request)
 	if err != nil {
@@ -300,8 +312,8 @@ func (s *StorageServiceOP) DeleteSnapshot(storageID, snapshotID string) (*Respon
 }
 
 // Attach attaches your volume to a device
-func (s *StorageServiceOP) Attach(storageID, snapshotID string, request *AttachStorageRequest) (*Response, error) {
-	path := fmt.Sprintf("%s/%s/snapshots/%s", storageBasePath, storageID, snapshotID)
+func (s *StorageServiceOP) Attach(storageID string, request *AttachStorageRequest) (*Response, error) {
+	path := fmt.Sprintf("%s/%s/attachments", storageBasePath, storageID)
 
 	req, err := s.client.NewRequest("POST", path, request)
 	if err != nil {
@@ -321,6 +333,40 @@ func (s *StorageServiceOP) Detach(attachmentID string) (*Response, error) {
 	path := fmt.Sprintf("%s/attachments/%s", storageBasePath, attachmentID)
 
 	req, err := s.client.NewRequest("DELETE", path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(req, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+// Restore restores a volume to the given snapshot
+func (s *StorageServiceOP) Restore(storageID string, request *RestoreVolumeRequest) (*Response, error) {
+	path := fmt.Sprintf("%s/%s/restore", storageBasePath, storageID)
+
+	req, err := s.client.NewRequest("POST", path, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(req, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+// Clone clones your volume or snapshot into a new volume. To clone the volume, send an empty body. To promote a volume snapshot into a new volume, include the snapshot_timestamp attribute in the request body.
+func (s *StorageServiceOP) Clone(storageID string, request *CloneVolumeRequest) (*Response, error) {
+	path := fmt.Sprintf("%s/%s/clone", storageBasePath, storageID)
+
+	req, err := s.client.NewRequest("POST", path, request)
 	if err != nil {
 		return nil, err
 	}

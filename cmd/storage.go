@@ -46,7 +46,7 @@ var listStorageCmd = &cobra.Command{
 	Use:   "list-volume",
 	Short: "Retrieve a volume by ID",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		err := ListStorage(storageID)
 		return err
 	},
@@ -56,7 +56,7 @@ var updateStorageCmd = &cobra.Command{
 	Use:   "update-volume",
 	Short: "Update a volume",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		description := cmd.Flag("desc").Value.String()
 		size, err := cmd.Flags().GetInt("size")
 		if err != nil {
@@ -75,7 +75,7 @@ var deleteStorageCmd = &cobra.Command{
 	Use:   "delete-volume",
 	Short: "Delete storage",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		err := DeleteStorage(storageID)
 		return err
 	},
@@ -85,7 +85,7 @@ var createSnapshotPolicyCmd = &cobra.Command{
 	Use:   "create-snapshot-policy",
 	Short: "Create a snapshot policy",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		snapshotFrequency := cmd.Flag("frequency").Value.String()
 		snapshotCount, err := cmd.Flags().GetInt("count")
 		if err != nil {
@@ -125,8 +125,8 @@ var listSnapshotsCmd = &cobra.Command{
 	Use:   "list-snapshots",
 	Short: "View a list of the current volume’s snapshots",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		policyID := cmd.Flag("policy-id").Value.String()
-		err := ListSnapshots(policyID)
+		storageID := cmd.Flag("volume-id").Value.String()
+		err := ListSnapshots(storageID)
 		return err
 	},
 }
@@ -135,8 +135,8 @@ var createSnapshotCmd = &cobra.Command{
 	Use:   "create-snapshot",
 	Short: "Create a snapshot of your volume",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		policyID := cmd.Flag("policy-id").Value.String()
-		err := CreateSnapshot(policyID)
+		storageID := cmd.Flag("volume-id").Value.String()
+		err := CreateSnapshot(storageID)
 		return err
 	},
 }
@@ -145,7 +145,7 @@ var deleteSnapshotCmd = &cobra.Command{
 	Use:   "delete-snapshot",
 	Short: "Delete a snapshot of your volume",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		snapshotID := cmd.Flag("snapshot-id").Value.String()
 		err := DeleteSnapshot(storageID, snapshotID)
 		return err
@@ -156,9 +156,8 @@ var listStorageEventsCmd = &cobra.Command{
 	Use:   "list-volume-events",
 	Short: "View a list of the current volume's events",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
-		snapshotID := cmd.Flag("snapshot-id").Value.String()
-		err := ListStorageEvents(storageID, snapshotID)
+		storageID := cmd.Flag("volume-id").Value.String()
+		err := ListStorageEvents(storageID)
 		return err
 	},
 }
@@ -167,10 +166,9 @@ var attachStorageCmd = &cobra.Command{
 	Use:   "attach-volume",
 	Short: "Attach a volume to a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		storageID := cmd.Flag("storage-id").Value.String()
-		snapshotID := cmd.Flag("snapshot-id").Value.String()
+		storageID := cmd.Flag("volume-id").Value.String()
 		deviceID := cmd.Flag("device-id").Value.String()
-		err := AttachStorage(storageID, snapshotID, deviceID)
+		err := AttachStorage(storageID, deviceID)
 		return err
 	},
 }
@@ -185,8 +183,30 @@ var detachStorageCmd = &cobra.Command{
 	},
 }
 
+var restoreStorageCmd = &cobra.Command{
+	Use:   "restore-volume",
+	Short: "Restore a volume to the given snapshot",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		storageID := cmd.Flag("volume-id").Value.String()
+		restorePoint := cmd.Flag("restore-point").Value.String()
+		err := RestoreStorage(storageID, restorePoint)
+		return err
+	},
+}
+
+var cloneStorageCmd = &cobra.Command{
+	Use:   "clone-volume",
+	Short: "Clone a volume or snapshot into a new volume",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		storageID := cmd.Flag("volume-id").Value.String()
+		snapshotTimestamp := cmd.Flag("snapshot-timestamp").Value.String()
+		err := CloneStorage(storageID, snapshotTimestamp)
+		return err
+	},
+}
+
 func init() {
-	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd, deleteStorageCmd, createSnapshotPolicyCmd, updateSnapshotPolicyCmd, deleteSnapshotPolicyCmd, listSnapshotsCmd, createSnapshotCmd, deleteSnapshotCmd, listStorageEventsCmd, attachStorageCmd, detachStorageCmd)
+	storageCmd.AddCommand(listStoragesCmd, createStorageCmd, listStorageCmd, updateStorageCmd, deleteStorageCmd, createSnapshotPolicyCmd, updateSnapshotPolicyCmd, deleteSnapshotPolicyCmd, listSnapshotsCmd, createSnapshotCmd, deleteSnapshotCmd, listStorageEventsCmd, attachStorageCmd, detachStorageCmd, restoreStorageCmd, cloneStorageCmd)
 	RootCmd.AddCommand(storageCmd)
 
 	// Flags for command: packet storage listall
@@ -202,19 +222,19 @@ func init() {
 	createStorageCmd.Flags().Int("count", 4, "Snapshots count")
 
 	// Flags for command: packet storage list
-	listStorageCmd.Flags().String("storage-id", "", "Storage ID")
+	listStorageCmd.Flags().String("volume-id", "", "Volume ID")
 
 	// Flags for command: packet storage update
-	updateStorageCmd.Flags().String("storage-id", "", "Storage ID")
+	updateStorageCmd.Flags().String("volume-id", "", "Volume ID")
 	updateStorageCmd.Flags().String("desc", "", "Description")
 	updateStorageCmd.Flags().Int("size", 120, "Volume size")
 	updateStorageCmd.Flags().Bool("lock", false, "Update and lock")
 
 	// Flags for command: packet storage delete
-	deleteStorageCmd.Flags().String("storage-id", "", "Storage ID")
+	deleteStorageCmd.Flags().String("volume-id", "", "Volume ID")
 
 	// Flags for command: packet storage create-snapshot-policy
-	createSnapshotPolicyCmd.Flags().String("storage-id", "", "Storage ID")
+	createSnapshotPolicyCmd.Flags().String("volume-id", "", "Volume ID")
 	createSnapshotPolicyCmd.Flags().String("frequency", "", "Snapshot frequency")
 	createSnapshotPolicyCmd.Flags().Int("count", 1, "Snapshots count")
 
@@ -227,24 +247,30 @@ func init() {
 	deleteSnapshotPolicyCmd.Flags().String("policy-id", "", "Snapshot policy ID")
 
 	// Flags for command: packet storage list-snapshots
-	listSnapshotsCmd.Flags().String("policy-id", "", "Snapshot policy ID")
+	listSnapshotsCmd.Flags().String("volume-id", "", "Volume ID")
 
 	// Flags for command: packet storage create-snapshot
-	createSnapshotCmd.Flags().String("policy-id", "", "Snapshot policy ID")
+	createSnapshotCmd.Flags().String("volume-id", "", "volume ID")
 
 	// Flags for command: packet storage delete-snapshot
-	deleteSnapshotCmd.Flags().String("storage-id", "", "Storage ID")
+	deleteSnapshotCmd.Flags().String("volume-id", "", "Volume ID")
 	deleteSnapshotCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
 
 	// Flags for command: packet storage list-events
-	listStorageEventsCmd.Flags().String("storage-id", "", "Storage ID")
-	listStorageEventsCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
+	listStorageEventsCmd.Flags().String("volume-id", "", "Volume ID")
 
 	// Flags for command: packet storage attach
-	attachStorageCmd.Flags().String("storage-id", "", "Storage ID")
-	attachStorageCmd.Flags().String("snapshot-id", "", "Snapshot policy ID")
+	attachStorageCmd.Flags().String("volume-id", "", "Volume ID")
 	attachStorageCmd.Flags().String("device-id", "", "Device ID")
 
 	// Flags for command: packet storage detach
 	detachStorageCmd.Flags().String("attachement-id", "", "Attachment ID")
+
+	// Flags for command: packet storage restore
+	restoreStorageCmd.Flags().String("volume-id", "", "Volume ID")
+	restoreStorageCmd.Flags().String("restore-point", "", "Restore point in the form of a Unix timestamp")
+
+	// Flags for command: packet storage clone
+	cloneStorageCmd.Flags().String("volume-id", "", "Volume ID")
+	cloneStorageCmd.Flags().String("snapshot-timestamp", "", "Snapshot timestamp(optional)")
 }

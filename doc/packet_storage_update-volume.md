@@ -14,17 +14,17 @@ packet storage update-volume
 ### Options
 
 ```
-      --desc string         Description
-      --lock                Update and lock
-      --size int            Volume size (default 120)
-      --storage-id string   Storage ID
+      --desc string        Description
+      --lock               Update and lock
+      --size int           Volume size (default 120)
+      --volume-id string   Volume ID
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO

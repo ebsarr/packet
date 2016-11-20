@@ -461,13 +461,13 @@ func ListProjectEvents(id string) error {
 }
 
 // ListStorageEvents prints out events by device ID
-func ListStorageEvents(storageID, snapshotID string) error {
+func ListStorageEvents(storageID string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	events, _, err := client.Events.ListStorageEvents(storageID, snapshotID)
+	events, _, err := client.Events.ListStorageEvents(storageID)
 	if err != nil {
 		return err
 	}
@@ -720,13 +720,13 @@ func DeleteSnapshotPolicy(snapshotPolicyID string) error {
 }
 
 // ListSnapshots returns a list of the current volume’s snapshots
-func ListSnapshots(snapshotPolicyID string) error {
+func ListSnapshots(storageID string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
 	}
 
-	snapshots, _, err := client.Storages.ListSnapshots(snapshotPolicyID)
+	snapshots, _, err := client.Storages.ListSnapshots(storageID)
 	if err != nil {
 		return err
 	}
@@ -736,7 +736,7 @@ func ListSnapshots(snapshotPolicyID string) error {
 }
 
 // CreateSnapshot creates a new snapshot of your volume
-func CreateSnapshot(snapshotPolicyID string) error {
+func CreateSnapshot(storageID string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
@@ -744,7 +744,7 @@ func CreateSnapshot(snapshotPolicyID string) error {
 
 	request := &extpackngo.CreateSnapShotRequest{}
 
-	_, e := client.Storages.CreateSnapshot(snapshotPolicyID, request)
+	_, e := client.Storages.CreateSnapshot(storageID, request)
 	return e
 }
 
@@ -760,7 +760,7 @@ func DeleteSnapshot(storageID, snapshotID string) error {
 }
 
 // AttachStorage attaches your volume to a device
-func AttachStorage(storageID, snapshotID, deviceID string) error {
+func AttachStorage(storageID, deviceID string) error {
 	client, err := NewExtPacketClient()
 	if err != nil {
 		return err
@@ -770,7 +770,7 @@ func AttachStorage(storageID, snapshotID, deviceID string) error {
 		DeviceID: deviceID,
 	}
 
-	_, e := client.Storages.Attach(storageID, snapshotID, request)
+	_, e := client.Storages.Attach(storageID, request)
 	return e
 }
 
@@ -782,5 +782,35 @@ func DetachStorage(attachmentID string) error {
 	}
 
 	_, e := client.Storages.Detach(attachmentID)
+	return e
+}
+
+// RestoreStorage restores a volume to the given snapshot
+func RestoreStorage(storageID, restorePoint string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.RestoreVolumeRequest{
+		RestorePoint: restorePoint,
+	}
+
+	_, e := client.Storages.Restore(storageID, request)
+	return e
+}
+
+// CloneStorage clones your volume or snapshot into a new volume. To clone the volume, send an empty body. To promote a volume snapshot into a new volume, include the snapshot_timestamp attribute in the request body.
+func CloneStorage(storageID, snapshotTimestamp string) error {
+	client, err := NewExtPacketClient()
+	if err != nil {
+		return err
+	}
+
+	request := &extpackngo.CloneVolumeRequest{
+		SnapshotTimestamp: snapshotTimestamp,
+	}
+
+	_, e := client.Storages.Clone(storageID, request)
 	return e
 }

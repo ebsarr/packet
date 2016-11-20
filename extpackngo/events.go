@@ -12,7 +12,7 @@ const eventBasePath = "/events"
 type EventService interface {
 	ListProjectEvents(projectID string) ([]Event, *Response, error)
 	ListDeviceEvents(deviceID string) ([]Event, *Response, error)
-	ListStorageEvents(storageID, snapshotID string) ([]Event, *Response, error)
+	ListStorageEvents(storageID string) ([]Event, *Response, error)
 	// Get(string) (*Event, *Response, error)
 }
 
@@ -77,8 +77,8 @@ func (e *EventServiceOp) ListProjectEvents(projectID string) ([]Event, *Response
 }
 
 // ListStorageEvents returns Events of a project
-func (e *EventServiceOp) ListStorageEvents(storageID, snapshotID string) ([]Event, *Response, error) {
-	path := fmt.Sprintf("storage/%s/snapshots/%s", storageID, snapshotID)
+func (e *EventServiceOp) ListStorageEvents(storageID string) ([]Event, *Response, error) {
+	path := fmt.Sprintf("volumes/%s/events", storageID)
 
 	req, err := e.client.NewRequest("GET", path, nil)
 	if err != nil {

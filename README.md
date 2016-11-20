@@ -15,27 +15,21 @@ $ go get -u github.com/ebsarr/packet
 Try the help
 ```
 $ packet -h
-A unified tool to manage your packet services
+CLI tool to manage packet.net services
 
 Usage:
   packet [flags]
   packet [command]
 
 Available Commands:
-  IP              Manage device IP addresses
-  configure       Set default configs for the packet cli.
-  device          Manage your devices
-  profile         Manage your profiles
-  list-facilities View a list of facilities(packet DCs)
-  list-os         View available operating systems
-  list-plans      View available plans.
-  project         Manage your projects.
-  ssh             Manage your ssh keys for secure login to your packet devices.
+  admin           Manage projects, ssh keys, etc...
+  baremetal       Manage server devices.
+  network         Manage packet network services
   storage         Manage your storages
 
 Flags:
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
   -v, --version          Show version and exit
 
 Use "packet [command] --help" for more information about a command.
@@ -43,13 +37,14 @@ Use "packet [command] --help" for more information about a command.
 
 # Getting started
 
-## Configure your API key
-Command syntax: `packet configure`
+## Configure your API key by adding a profile
+Command syntax: `packet admin add-profile`
 ```
-$ packet configure
+$ packet admin add-profile
 Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
+This command will add a profile named "default".
 **NOTE:** Without your API key configured, you'll need to specify it in every command in the form: `packet --key <APIKEY> <command> <subcommand> <flags>`. You can also optionnaly configure a default project ID.
 
 If you have multiple accounts, or if you are working on multiple projects, you can set profiles to make it easy to switch between accounts or projects. After setting multiple profiles, you can use `-p` or `--profile` option to switch between accounts and projects.
@@ -57,13 +52,13 @@ If you have multiple accounts, or if you are working on multiple projects, you c
 ### Setting a profile
 Here I'm creating a new profile named `ebsarr`
 ```
-$ packet configure -p ebsarr
+$ packet admin add-profile -p ebsarr
 Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
-Without the `-p` switch, the `configure` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
+Without the `-p` switch, the `add-profile` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
 ```
-$ packet profile list
+$ packet admin list-profiles
 NAME      	APIKEY                          	DEFAULT PROJECT
 ----      	------                          	---------------
 default   	XMiR----------------------------	13935598-d08c-4bd8------------------
@@ -71,12 +66,12 @@ ebsarr    	XMiR----------------------------	e30d25da-728d-47fe------------------
 ```
 Now I can switch easily between projects when running the `packet` command:
 ```
-$ packet -p ebsarr device listall
+$ packet -p ebsarr baremetal list-devices
 []
 ```
 Without the `-p` option, the default profile will be used:
 ```
-$ packet device listall
+$ packet baremetal list-devices
 [
     {
         "id": "69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",
@@ -94,7 +89,7 @@ $ packet device listall
 
 ### Create a new project
 ```
-$ packet project create --name "My Brand New Project"
+$ packet admin create-project --name "My Brand New Project"
 {
     "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
     "name": "My Brand New Project",
@@ -105,7 +100,7 @@ $ packet project create --name "My Brand New Project"
 
 ### View all your projects
 ```
-$ packet project listall
+$ packet admin list-projects
 [
     {
         "id": "13935598-d08c-4bd8-8281-3196b6379452",
@@ -116,7 +111,7 @@ $ packet project listall
 ```
 ### View project by ID
 ```
-$ packet project list --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
+$ packet admin list-project --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
 {
     "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
     "name": "My Brand New Project",
@@ -129,7 +124,7 @@ $ packet project list --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
 
 ### Create a new device
 ```
-$ packet device create --project-id <Project ID>\
+$ packet baremetal create-device --project-id <Project ID>\
 	--billing hourly \
 	--facility ewr1\
 	--hostname CreatedFromCli\
@@ -156,7 +151,7 @@ Provisioning of device successfully started...
 
 ### View device by ID
 ```
-$ packet device list --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
+$ packet baremetal list-device --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
 {
     "id": "2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
     "href": "/devices/2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
@@ -177,16 +172,11 @@ Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/sarre27/.ssh/id_rsa): ./id_rsa
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
-Your identification has been saved in bass2@packet/id_rsa.
-Your public key has been saved in bass2@packet/id_rsa.pub.
-The key fingerprint is:
-SHA256:YKBywX5luIx7B+bD1BCkG2kcia/KDuTwkA2If/GswGY sarre27@bdupc004.local
-The key's randomart image is:
 ...
 ```
 Register to packet
 ```
-$ packet ssh create --label bass2@packet --file id_rsa.pub
+$ packet admin create-sshkey --label bass2@packet --file id_rsa.pub
 {
     "id": "02b76cb4-ebeb-4eee-8d5d-a6d744aa793b",
     "label": "bass2@packet",
@@ -203,7 +193,7 @@ $ packet ssh create --label bass2@packet --file id_rsa.pub
 ```
 ### View registerd SSH keys
 ```
-$ packet ssh listall
+$ packet admin list-sshkeys
 [
     {
         "id": "76dee787-07a7-4510-9760-d27d0c51531e",
@@ -216,10 +206,10 @@ $ packet ssh listall
 ```
 ### Delete key by ID
 ```sh
-$ packet ssh delete --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+$ packet admin delete-sshkey --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
 $ echo $?
 0
-$ packet ssh list --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+$ packet admin list-sshkey --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
 Error: GET https://api.packet.net/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b: 404 Not found
 ```
 
@@ -233,6 +223,7 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 | Version | Description |
 |---------|-------------|
+| **2.0**     | - Changed command structure, many bugs fixed.
 | **1.3**     | - Can now delete profiles |
 | **1.2**     | - Added profile support: use `--profile` option to switch between profiles | 
 |         | - `ssh` command now reads keys from files, use `--file` instead of `ssh-key` to read from files.         |

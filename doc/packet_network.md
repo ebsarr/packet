@@ -10,12 +10,12 @@ Manage packet network services
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO
-* [packet](packet.md)	 - A unified tool to manage your packet services
+* [packet](packet.md)	 - CLI tool to manage packet.net services
 * [packet network assign-ip](packet_network_assign-ip.md)	 - Assign IP address to a device by ID
 * [packet network list-ip](packet_network_list-ip.md)	 - Retrieve IP address by ID
 * [packet network list-ip-reservation](packet_network_list-ip-reservation.md)	 - Retrieve a single IP reservation object by ID

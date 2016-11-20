@@ -10,12 +10,12 @@ Manage projects, ssh keys, etc...
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO
-* [packet](packet.md)	 - A unified tool to manage your packet services
+* [packet](packet.md)	 - CLI tool to manage packet.net services
 * [packet admin add-profile](packet_admin_add-profile.md)	 - Set default configs for the packet cli.
 * [packet admin create-project](packet_admin_create-project.md)	 - Create a new project
 * [packet admin create-sshkey](packet_admin_create-sshkey.md)	 - Configure a new SSH key

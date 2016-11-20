@@ -1,11 +1,11 @@
 ## packet
 
-A unified tool to manage your packet services
+CLI tool to manage packet.net services
 
 ### Synopsis
 
 
-A unified tool to manage your packet services
+CLI tool to manage packet.net services
 
 ```
 packet
@@ -14,8 +14,8 @@ packet
 ### Options
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
   -v, --version          Show version and exit
 ```
 

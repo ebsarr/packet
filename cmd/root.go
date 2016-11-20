@@ -13,7 +13,7 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:          "packet",
-	Short:        "A unified tool to manage your packet services",
+	Short:        "CLI tool to manage packet.net services",
 	SilenceUsage: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		showVersion, _ := cmd.Flags().GetBool("version")
@@ -37,8 +37,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Global flag for setting the API key.
-	RootCmd.PersistentFlags().StringP("key", "k", "", "Specify the api key")
-	RootCmd.PersistentFlags().StringP("profile", "p", "default", "Specify profile name")
+	RootCmd.PersistentFlags().StringP("key", "k", "", "API key")
+	RootCmd.PersistentFlags().StringP("profile", "p", "default", "Profile name")
 	RootCmd.Flags().BoolP("version", "v", false, "Show version and exit")
 }
 

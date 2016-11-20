@@ -10,13 +10,14 @@ Manage your storages
 ### Options inherited from parent commands
 
 ```
-  -k, --key string       Specify the api key
-  -p, --profile string   Specify profile name (default "default")
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
 ```
 
 ### SEE ALSO
-* [packet](packet.md)	 - A unified tool to manage your packet services
+* [packet](packet.md)	 - CLI tool to manage packet.net services
 * [packet storage attach-volume](packet_storage_attach-volume.md)	 - Attach a volume to a device
+* [packet storage clone-volume](packet_storage_clone-volume.md)	 - Clone a volume or snapshot into a new volume
 * [packet storage create-snapshot](packet_storage_create-snapshot.md)	 - Create a snapshot of your volume
 * [packet storage create-snapshot-policy](packet_storage_create-snapshot-policy.md)	 - Create a snapshot policy
 * [packet storage create-volume](packet_storage_create-volume.md)	 - Create a volume
@@ -28,6 +29,7 @@ Manage your storages
 * [packet storage list-volume](packet_storage_list-volume.md)	 - Retrieve a volume by ID
 * [packet storage list-volume-events](packet_storage_list-volume-events.md)	 - View a list of the current volume's events
 * [packet storage list-volumes](packet_storage_list-volumes.md)	 - Retrieve all volumes
+* [packet storage restore-volume](packet_storage_restore-volume.md)	 - Restore a volume to the given snapshot
 * [packet storage update-snapshot-policy](packet_storage_update-snapshot-policy.md)	 - Update a snapshot policy
 * [packet storage update-volume](packet_storage_update-volume.md)	 - Update a volume
 
