@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Packet by ebsarr</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Packet</h1>
+      <h2 class="project-tagline">packet, a CLI tool to manage packet.net services</h2>
+      <a href="https://github.com/ebsarr/packet" class="btn">View on GitHub</a>
+      <a href="https://github.com/ebsarr/packet/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ebsarr/packet/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="packet-a-cli-tool-to-manage-packet-services" class="anchor" href="#packet-a-cli-tool-to-manage-packet-services" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>packet, a CLI tool to manage Packet services</h1>
+
+<p><a href="https://goreportcard.com/report/github.com/ebsarr/packet"><img src="https://goreportcard.com/badge/github.com/ebsarr/packet" alt="Go Report Card"></a></p>
+
+<p>packet is a CLI tool to manage <a href="https://www.packet.net">packet.net</a> services. You can browse the help <a href="doc/packet.md">here</a>.</p>
+
+<pre><code>    .--~~~~~~~~~~~~~------.
+   /--===============------\\
+   | |^^^^^^^^^^^^^^^|     |
+   | |               |     |
+   | | &gt; packet v2.0 |     |
+   | |               |     |
+   | |_______________|     |
+   |                   ::::|
+   '======================='
+   //-"-"-"-"-"-"-"-"-"-"-\\\\
+  //_"_"_"_"_"_"_"_"_"_"_"_\\\\
+  [-------------------------]
+  \\_________________________/
+</code></pre>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>Install with <code>go get</code></p>
+
+<pre><code>$ go get -u github.com/ebsarr/packet
+</code></pre>
+
+<p><code>packet</code> executable will be installed in <code>$GOPATH/bin</code> or <code>$GOBIN</code>
+<br>
+<br>
+You can also run it in a docker container:</p>
+
+<pre><code>$ docker run -it ebsarr/packet bash
+</code></pre>
+
+<p>Try the help</p>
+
+<pre><code>$ packet -h
+CLI tool to manage packet.net services
+
+Usage:
+  packet [flags]
+  packet [command]
+
+Available Commands:
+  admin           Manage projects, ssh keys, etc...
+  baremetal       Manage server devices.
+  network         Manage packet network services
+  storage         Manage your storages
+
+Flags:
+  -k, --key string       API key
+  -p, --profile string   Profile name (default "default")
+  -v, --version          Show version and exit
+
+Use "packet [command] --help" for more information about a command.
+</code></pre>
+
+<h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting started</h1>
+
+<h2>
+<a id="configure-your-api-key-by-adding-a-profile" class="anchor" href="#configure-your-api-key-by-adding-a-profile" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure your API key by adding a profile</h2>
+
+<p>Command syntax: <code>packet admin add-profile</code></p>
+
+<pre><code>$ packet admin add-profile
+Enter your API key [ *****y7wi ]: &lt;APIKEY&gt;
+Enter your default project ID [  ]: &lt;Project ID&gt;
+</code></pre>
+
+<p>This command will add a profile named "default".
+<br>
+<strong>NOTE:</strong> Without your API key configured, you'll need to specify it in every command in the form: <code>packet --key &lt;APIKEY&gt; &lt;command&gt; &lt;subcommand&gt; &lt;flags&gt;</code>. You can also optionnaly configure a default project ID.</p>
+
+<p>If you have multiple accounts, or if you are working on multiple projects, you can set profiles to make it easy to switch between accounts or projects. After setting multiple profiles, you can use <code>-p</code> or <code>--profile</code> option to switch between accounts and projects.</p>
+
+<h3>
+<a id="setting-a-profile" class="anchor" href="#setting-a-profile" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting a profile</h3>
+
+<p>Here I'm creating a new profile named <code>ebsarr</code></p>
+
+<pre><code>$ packet admin add-profile -p ebsarr
+Enter your API key [ *****y7wi ]: &lt;APIKEY&gt;
+Enter your default project ID [  ]: &lt;Project ID&gt;
+</code></pre>
+
+<p>Without the <code>-p</code> switch, the <code>add-profile</code> command sets up a profile named "default". You can view your profiles with the <code>list-profiles</code> command:</p>
+
+<pre><code>$ packet admin list-profiles
+NAME        APIKEY                              DEFAULT PROJECT
+----        ------                              ---------------
+default     XMiR----------------------------    13935598-d08c-4bd8------------------
+ebsarr      XMiR----------------------------    e30d25da-728d-47fe------------------
+</code></pre>
+
+<p>Now I can switch easily between projects when running the <code>packet</code> command:</p>
+
+<pre><code>$ packet -p ebsarr baremetal list-devices
+[]
+</code></pre>
+
+<p>Without the <code>-p</code> option, the default profile will be used:</p>
+
+<pre><code>$ packet baremetal list-devices
+[
+    {
+        "id": "69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",
+        "href": "/devices/69148e7c-44e1-4b4a-ac1a-f9e08b552fe8",
+        "hostname": "ebsarrtest01",
+        "state": "active",
+        "created_at": "2016-07-15T07:16:28Z",
+        "updated_at": "2016-07-15T07:31:27Z",
+        "billing_cycle": "hourly",
+        "ip_addresses": [
+...
+</code></pre>
+
+<h2>
+<a id="manage-your-projects" class="anchor" href="#manage-your-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manage your projects</h2>
+
+<h3>
+<a id="create-a-new-project" class="anchor" href="#create-a-new-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create a new project</h3>
+
+<pre><code>$ packet admin create-project --name "My Brand New Project"
+{
+    "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
+    "name": "My Brand New Project",
+    "created_at": "2016-05-29T15:58:27Z",
+    "updated_at": "2016-05-29T15:58:27Z",
+...
+</code></pre>
+
+<h3>
+<a id="view-all-your-projects" class="anchor" href="#view-all-your-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View all your projects</h3>
+
+<pre><code>$ packet admin list-projects
+[
+    {
+        "id": "13935598-d08c-4bd8-8281-3196b6379452",
+        "name": "Demo",
+        "created_at": "2016-04-27T02:42:12Z",
+        "updated_at": "2016-05-29T15:04:20Z",
+...
+</code></pre>
+
+<h3>
+<a id="view-project-by-id" class="anchor" href="#view-project-by-id" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View project by ID</h3>
+
+<pre><code>$ packet admin list-project --project-id 52a57c4b-5e28-4f79-9133-f7c953fa0e35
+{
+    "id": "52a57c4b-5e28-4f79-9133-f7c953fa0e35",
+    "name": "My Brand New Project",
+    "created_at": "2016-05-29T15:58:27Z",
+    "updated_at": "2016-05-29T15:58:27Z",
+...
+</code></pre>
+
+<h2>
+<a id="manage-your-devices" class="anchor" href="#manage-your-devices" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manage your devices</h2>
+
+<h3>
+<a id="create-a-new-device" class="anchor" href="#create-a-new-device" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create a new device</h3>
+
+<pre><code>$ packet baremetal create-device --project-id &lt;Project ID&gt;\
+    --billing hourly \
+    --facility ewr1\
+    --hostname CreatedFromCli\
+    --os-type coreos_stable\
+    --plan baremetal_0
+
+Provisioning of device successfully started...
+ [ 2016-05-29T14:58:19Z ] "%device%" (Type 0) was deployed to project "%project%" by %user%
+ [ 2016-05-29T14:59:05Z ] Network configured with addresses 147.75.199.11, 2604:1380:0:7b00::17, and 10.100.131.151
+ [ 2016-05-29T14:59:16Z ] Configuration written, restarting device
+ [ 2016-05-29T14:59:36Z ] Device connected to DHCP system
+ [ 2016-05-29T15:01:54Z ] Installation finished, rebooting server
+ [ 2016-05-29T15:02:50Z ] Provision complete! Your device is ready to go.
+{
+    "id": "2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
+    "href": "/devices/2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
+    "hostname": "CreatedFromCli",
+    "state": "active",
+    "created_at": "2016-05-29T14:58:19Z",
+    "updated_at": "2016-05-29T15:02:50Z",
+    "billing_cycle": "hourly",
+...
+</code></pre>
+
+<h3>
+<a id="view-device-by-id" class="anchor" href="#view-device-by-id" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View device by ID</h3>
+
+<pre><code>$ packet baremetal list-device --device-id 2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88
+{
+    "id": "2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
+    "href": "/devices/2f027ea7-e5e9-4768-b2ba-fc03f3fa2b88",
+    "hostname": "CreatedFromCli",
+    "state": "active",
+    "created_at": "2016-05-29T14:58:19Z",
+    "updated_at": "2016-05-29T15:02:50Z",
+    "billing_cycle": "hourly",
+...
+</code></pre>
+
+<h2>
+<a id="managing-ssh-keys" class="anchor" href="#managing-ssh-keys" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Managing SSH keys</h2>
+
+<h3>
+<a id="create-ssh-key" class="anchor" href="#create-ssh-key" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create SSH key</h3>
+
+<p>First generate the key</p>
+
+<pre><code>$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/sarre27/.ssh/id_rsa): ./id_rsa
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+...
+</code></pre>
+
+<p>Register to packet</p>
+
+<pre><code>$ packet admin create-sshkey --label bass2@packet --file id_rsa.pub
+{
+    "id": "02b76cb4-ebeb-4eee-8d5d-a6d744aa793b",
+    "label": "bass2@packet",
+    "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGENCZL3i+rrBZb2sQDt6H2xyziJuNB2ylFOnEywlBNdn0bGvXBFpitpOFmumYU7d0c2i2AYqDP8JgCu1sBiv1hENdMoMe8nmJRR8kjz7q+xWP18R+hYCAgvLEsfhW6fp7xpwK4cYTq07axg0hXSg+Lu8zjcm79EfucXPcNeYLq+27yPI3r8WnglMxfxhz7woBOlAjru6UBoCo+kpXwxA987rHoZEOeBpKGe8OzNt4Vqd8XOEYfwslCbsKBNfMJT0Eh/HeQ6WOOpZMsf3p6ufAocCsP5BeyZsChkuyNeNnPjMQG6chL8GzbMjb463IyiRJHkrM0zQPB+ysIhU5o8CP",
+    "fingerprint": "f2:ca:e8:ea:dc:bf:a3:67:ad:4c:21:7a:92:bb:ed:ff",
+    "created_at": "2016-05-30T05:36:29Z",
+    "updated_at": "2016-05-30T05:36:29Z",
+    "user": {
+        "id": "",
+        "href": "/users/0193dabc-a51d-4190-a01e-b270d664db3a"
+    },
+    "href": "/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b"
+}
+</code></pre>
+
+<h3>
+<a id="view-registerd-ssh-keys" class="anchor" href="#view-registerd-ssh-keys" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View registerd SSH keys</h3>
+
+<pre><code>$ packet admin list-sshkeys
+[
+    {
+        "id": "76dee787-07a7-4510-9760-d27d0c51531e",
+        "label": "bass2@pckt",
+        "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFj5UBo8zP4Uet9xsHn83HG9g7fFeGuSLHcjIWpE/WTLqV76H2DA9PCmmUivYi8f/VMSUpKSET2zC8wrzamepPrWXGqoFsB/I1za8ghcjhzN66und5dOPJzH2C+QihU1aH5cBoaPekb03HSK3qKUa1lCa0nmtdkvWxsspC42zXnf4PqOKkolang7sUe3tj4QvajEFxnWozcOc2Nfukv4q9Ml5vqSePCnYWby1oXWafezzQqThNe0+1DUYYKRe46D11E9wPamQiU6v7edlCSrzD2lpKxWGdtXPNZJYivpUdvCoj38sKuEfATsFZKd/HAiuKVe/o7Mpp3ZccbnLNgV1R",
+        "fingerprint": "1f:e9:bf:0d:66:10:5f:6c:47:70:0b:70:c0:d5:db:7c",
+        "created_at": "2016-05-27T10:17:47Z",
+        "updated_at": "2016-05-27T10:17:47Z",
+...
+</code></pre>
+
+<h3>
+<a id="delete-key-by-id" class="anchor" href="#delete-key-by-id" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Delete key by ID</h3>
+
+<div class="highlight highlight-source-shell"><pre>$ packet admin delete-sshkey --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+$ <span class="pl-c1">echo</span> <span class="pl-smi">$?</span>
+0
+$ packet admin list-sshkey --key-id 02b76cb4-ebeb-4eee-8d5d-a6d744aa793b
+Error: GET https://api.packet.net/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b: 404 Not found</pre></div>
+
+<h2>
+<a id="for-more-help" class="anchor" href="#for-more-help" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For more help</h2>
+
+<p>Type <code>packet -h</code> in your console or browse the help <a href="doc/packet.md">here</a>.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="LICENSE">MIT</a></p>
+
+<h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changelog</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2.0</strong></td>
+<td>- Changed command structure, many bugs fixed.</td>
+</tr>
+<tr>
+<td><strong>1.3</strong></td>
+<td>- Can now delete profiles</td>
+</tr>
+<tr>
+<td><strong>1.2</strong></td>
+<td>- Added profile support: use <code>--profile</code> option to switch between profiles</td>
+</tr>
+<tr>
+<td></td>
+<td>- <code>ssh</code> command now reads keys from files, use <code>--file</code> instead of <code>ssh-key</code> to read from files.</td>
+</tr>
+<tr>
+<td><strong>1.1</strong></td>
+<td>Added support for userdata</td>
+</tr>
+<tr>
+<td><strong>1.0</strong></td>
+<td>First version</td>
+</tr>
+</tbody>
+</table>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ebsarr/packet">Packet</a> is maintained by <a href="https://github.com/ebsarr">ebsarr</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
