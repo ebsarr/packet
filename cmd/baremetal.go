@@ -151,7 +151,7 @@ func init() {
 	createDeviceCmd.Flags().String("project-id", "", "The project ID.")
 	createDeviceCmd.Flags().String("hostname", "", "Hostname to assign to the created device.")
 	createDeviceCmd.Flags().String("plan", "baremetal_0", "Server type to create the device.")
-	createDeviceCmd.Flags().String("facility", "", "DC location. Available values are sjc1: Sunnyvale CA, ewr1: Parsippany NJ, ams1: Amsterdam NL")
+	createDeviceCmd.Flags().String("facility", "", "DC location. Available values are sjc1: Sunnyvale CA, ewr1: Parsippany NJ, ams1: Amsterdam NL, nrt1: Tokyo JP")
 	createDeviceCmd.Flags().String("os-type", "centos_7", "Operating system to deploy to the server.")
 	createDeviceCmd.Flags().String("billing", "hourly", "Choose \"hourly\" or \"monthly\" billing.")
 	createDeviceCmd.Flags().StringP("file", "f", "", "Read userdata from a file.")
