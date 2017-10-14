@@ -72,11 +72,11 @@ If you have multiple accounts, or if you are working on multiple projects, you c
 ### Setting a profile
 Here I'm creating a new profile named `ebsarr`
 ```
-$ packet admin add-profile -p ebsarr
+$ packet admin add-profile -n ebsarr
 Enter your API key [ *****y7wi ]: <APIKEY>
 Enter your default project ID [  ]: <Project ID>
 ```
-Without the `-p` switch, the `add-profile` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
+Without the `-n` switch, the `add-profile` command sets up a profile named "default". You can view your profiles with the `list-profiles` command:
 ```
 $ packet admin list-profiles
 NAME      	APIKEY                          	DEFAULT PROJECT
