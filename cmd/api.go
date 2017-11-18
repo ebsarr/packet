@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/packethost/packngo"
@@ -158,7 +159,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 	}
 
 	req := packngo.DeviceCreateRequest{
-		Hostname:     hostname,
+		HostName:     hostname,
 		Plan:         plan,
 		Facility:     facility,
 		OS:           operatingSystem,
@@ -185,7 +186,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 	}
 
 	req := packngo.DeviceCreateRequest{
-		Hostname:     hostname,
+		HostName:     hostname,
 		Plan:         plan,
 		Facility:     facility,
 		OS:           operatingSystem,
@@ -209,8 +210,8 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 		return err
 	}
 
-	fmt.Println()
-	fmt.Println("Provisioning of device successfully started...")
+	fmt.Fprint(os.Stderr, "\n")
+	fmt.Fprint(os.Stderr, "Provisioning of device successfully started...")
 
 	for {
 		events, _, err := extclient.Events.ListDeviceEvents(d.ID)
@@ -221,7 +222,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 		currentEventO := events[0]
 
 		if currentEventO.Body != lastEvent {
-			fmt.Printf(" [ %s ] %s\n", currentEventO.Create, currentEventO.Body)
+			fmt.Fprintf(os.Stderr, " [ %s ] %s\n", currentEventO.Create, currentEventO.Body)
 			lastEvent = currentEventO.Body
 		}
 
