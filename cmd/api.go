@@ -159,7 +159,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 	}
 
 	req := packngo.DeviceCreateRequest{
-		HostName:     hostname,
+		Hostname:     hostname,
 		Plan:         plan,
 		Facility:     facility,
 		OS:           operatingSystem,
@@ -186,7 +186,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 	}
 
 	req := packngo.DeviceCreateRequest{
-		HostName:     hostname,
+		Hostname:     hostname,
 		Plan:         plan,
 		Facility:     facility,
 		OS:           operatingSystem,
