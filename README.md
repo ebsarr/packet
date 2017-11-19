@@ -243,7 +243,8 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md).
 
 | Version | Description |
 |---------|-------------|
-| **2.0**     | - Changed command structure, many bugs fixed.
+| **2.1**     | - Add support for spot market |
+| **2.0**     | - Changed command structure, many bugs fixed.|
 | **1.3**     | - Can now delete profiles |
 | **1.2**     | - Added profile support: use `--profile` option to switch between profiles | 
 |         | - `ssh` command now reads keys from files, use `--file` instead of `ssh-key` to read from files.         |
