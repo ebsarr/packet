@@ -7,6 +7,8 @@ import (
 )
 
 var silent bool
+var spotInstance bool
+var spotPriceMax float64
 
 // baremetalCmd represents the baremetal command
 var baremetalCmd = &cobra.Command{
@@ -56,10 +58,10 @@ var createDeviceCmd = &cobra.Command{
 		}
 		// tags := cmd.Flag("tags").Value.String()
 		if silent {
-			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, []string{})
+			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, []string{}, spotInstance, spotPriceMax)
 			return err
 		}
-		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, []string{})
+		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, []string{}, spotInstance, spotPriceMax)
 		return err
 	},
 }
@@ -156,6 +158,8 @@ func init() {
 	createDeviceCmd.Flags().String("billing", "hourly", "Choose \"hourly\" or \"monthly\" billing.")
 	createDeviceCmd.Flags().StringP("file", "f", "", "Read userdata from a file.")
 	createDeviceCmd.Flags().BoolVarP(&silent, "silent", "s", false, "Omit provisioning logs")
+	createDeviceCmd.Flags().BoolVarP(&spotInstance, "spot-instance", "", false, "Create as a spot instance")
+	createDeviceCmd.Flags().Float64VarP(&spotPriceMax, "spot-price-max", "", 0.0, "Spot market price bid.")
 
 	// Flags for other device commands that require the device ID.
 	deleteDeviceCmd.Flags().String("device-id", "", "Device ID")

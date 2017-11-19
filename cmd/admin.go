@@ -231,8 +231,20 @@ var listPlansCmd = &cobra.Command{
 	},
 }
 
+// Spot market
+
+// spotPricesCmd represents the spot-prices command
+var spotPricesCmd = &cobra.Command{
+	Use:   "spot-prices",
+	Short: "View spot market prices",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := SpotMarketPrices()
+		return err
+	},
+}
+
 func init() {
-	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd)
+	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd, spotPricesCmd)
 	RootCmd.AddCommand(adminCmd)
 
 	listProfilesCmd.Flags().StringP("name", "n", "", "Profile name")

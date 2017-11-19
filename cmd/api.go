@@ -152,7 +152,7 @@ func ListDevice(deviceID string) error {
 }
 
 // CreateDevice creates a new device
-func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string) error {
+func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -166,6 +166,8 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
 		UserData:     userData,
+		SpotInstance: spotInstance,
+		SpotPriceMax: spotPriceMax,
 		Tags:         tags,
 	}
 
@@ -179,7 +181,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 }
 
 // CreateDeviceVerbose creates a new device and logs events till the device is provisionned
-func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string) error {
+func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -193,6 +195,8 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
 		UserData:     userData,
+		SpotInstance: spotInstance,
+		SpotPriceMax: spotPriceMax,
 		Tags:         tags,
 	}
 
@@ -814,4 +818,22 @@ func CloneStorage(storageID, snapshotTimestamp string) error {
 
 	_, e := client.Storages.Clone(storageID, request)
 	return e
+}
+
+// Ifs for SpotMarket
+
+// SpotMarketPrices shows the spot market prices
+func SpotMarketPrices() error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	spotMarketPrices, _, err := client.SpotMarket.Prices()
+	if err != nil {
+		return err
+	}
+
+	err = MarshallAndPrint(spotMarketPrices)
+	return err
 }
