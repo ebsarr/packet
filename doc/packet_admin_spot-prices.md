@@ -11,6 +11,8 @@ View spot market prices
 packet admin spot-prices
 ```
 
+For more details on the Packet spot market, see the [Packet spot market documentation](https://help.packet.net/technical/deployment-options/spot-market).
+
 ### Options inherited from parent commands
 
 ```
