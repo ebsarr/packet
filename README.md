@@ -211,7 +211,7 @@ $ packet admin create-sshkey --label bass2@packet --file id_rsa.pub
     "href": "/ssh-keys/02b76cb4-ebeb-4eee-8d5d-a6d744aa793b"
 }
 ```
-### View registerd SSH keys
+### View registered SSH keys
 ```
 $ packet admin list-sshkeys
 [
