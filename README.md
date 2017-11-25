@@ -1,5 +1,5 @@
 # packet, a CLI tool to manage Packet services
-[![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
+[![Latest Version](https://img.shields.io/badge/release-v2.1.1-yellowgreen.svg)](https://github.com/ebsarr/packet/releases) [![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
 
 packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
@@ -192,7 +192,7 @@ Some of the snapshot related commands may not make sense. I will revisit the API
 Type `packet -h` in your console or browse the help [here](doc/packet.md) to view command options.
 
 ## License
-[MIT](LICENSE)
+[![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Changelog
 
