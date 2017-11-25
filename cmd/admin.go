@@ -251,6 +251,7 @@ func init() {
 	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd, spotPricesCmd)
 	RootCmd.AddCommand(adminCmd)
 
+	// Flags for profile related commands: add-profile, list-profiles, delete-profile
 	addProfileCmd.Flags().StringP("name", "n", "", "Profile name")
 	listProfilesCmd.Flags().StringP("name", "n", "", "Profile name")
 	deleteProfileCmd.Flags().StringP("name", "n", "", "Profile name")
