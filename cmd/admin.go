@@ -27,7 +27,11 @@ The following configurations are supported:
 - default project ID
   This ID will be used if "--project-id" flag is missing in command.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := Configure()
+		profile := cmd.Flag("name").Value.String()
+		if profile == "" {
+			profile = "default"
+		}
+		err := Configure(profile)
 		return err
 	},
 }
@@ -247,6 +251,7 @@ func init() {
 	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd, spotPricesCmd)
 	RootCmd.AddCommand(adminCmd)
 
+	addProfileCmd.Flags().StringP("name", "n", "", "Profile name")
 	listProfilesCmd.Flags().StringP("name", "n", "", "Profile name")
 	deleteProfileCmd.Flags().StringP("name", "n", "", "Profile name")
 

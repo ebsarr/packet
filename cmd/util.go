@@ -36,7 +36,7 @@ func (c *Config) String() string {
 }
 
 // Configure prompts the user to configure a default API key
-func Configure() error {
+func Configure(profile string) error {
 
 	// Modify to true if user changes the config
 	var hasChanged bool
@@ -45,7 +45,7 @@ func Configure() error {
 	var newKey, currentKey, keySuffix, currentProjectID, projectID string
 
 	// Get the profile name from CLI
-	profile := getProfile()
+	// profile := getProfileName()
 
 	// Get the current key, create a suffix for hint.
 	// the current key shall not be displayed on the console
