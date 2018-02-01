@@ -4,7 +4,7 @@ RUN apk -U --no-cache add \
 	  build-base \
 	  go \
 	  git \
- 	&& go get --ldflags '-linkmode external -extldflags "-static"' -u github.com/ebsarr/packet
+ 	&& go get --ldflags '-linkmode external -extldflags "-static"' -u github.com/sygibson/packet
 
 FROM scratch
 COPY --from=build /etc/ssl /etc/ssl

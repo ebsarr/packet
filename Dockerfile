@@ -6,7 +6,7 @@ RUN export GOPATH=$HOME/go && \
     apt-get install -y golang && \
     apt-get install -y bash-completion && \
     apt-get install -y ca-certificates && \
-    go get -u github.com/ebsarr/packet && \
+    go get -u github.com/sygibson/packet && \
     mv $GOPATH/bin/packet /usr/local/bin && \
     /usr/local/bin/packet genautocomplete && \
     mv packet-autocomplete.sh /etc/bash_completion.d/packet &&\
