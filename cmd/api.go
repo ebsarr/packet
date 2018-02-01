@@ -152,7 +152,7 @@ func ListDevice(deviceID string) error {
 }
 
 // CreateDevice creates a new device
-func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
+func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, alwaysPXE, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -165,6 +165,7 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 		OS:           operatingSystem,
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
+		AlwaysPXE:    alwaysPXE,
 		UserData:     userData,
 		SpotInstance: spotInstance,
 		SpotPriceMax: spotPriceMax,
@@ -194,6 +195,7 @@ func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, b
 		OS:           operatingSystem,
 		BillingCycle: billingCycle,
 		ProjectID:    projectID,
+		AlwaysPXE:    alwaysPXE,
 		UserData:     userData,
 		SpotInstance: spotInstance,
 		SpotPriceMax: spotPriceMax,
