@@ -71,7 +71,7 @@ func CreateProject(name, paymentID string) error {
 
 	req := packngo.ProjectCreateRequest{
 		Name:          name,
-		PaymentMethod: paymentID,
+		PaymentMethodID: paymentID,
 	}
 
 	p, _, err := client.Projects.Create(&req)
