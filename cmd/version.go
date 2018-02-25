@@ -1,6 +1,6 @@
 package cmd
 
-const version = "2.1.2"
+const version = "2.2"
 
 /*
 const version = `        .--~~~~~~~~~~~~~------.

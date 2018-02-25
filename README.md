@@ -148,6 +148,7 @@ Syntax: `packet baremetal [subcommand]`
 | `poweron-device`  | Power on a device |
 | `reboot-device`   | Reboot a device |
 | `unlock-device`   | Unlock a device |
+| `update-device`   | Update a device |
 
 ## `packet network`: Manage packet network services
 
@@ -198,6 +199,7 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md) to vie
 
 | Version | Description |
 |---------|-------------|
+| **2.2**     | "update-device" command added; more options for "create-device" command. |
 | **2.1.2**     | Fix compilation error. |
 | **2.1.1**     | Bug fix around profile configuration. Now you can use `--name` or `-n` to configure and name a profile |
 | **2.1**     | Add support for spot market |
