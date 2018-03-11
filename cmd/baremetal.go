@@ -77,13 +77,14 @@ var updateDeviceCmd = &cobra.Command{
 	Short: "Update a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var userData string
+		var userDataFile string
 		deviceID := cmd.Flag("device-id").Value.String()
 		hostname := cmd.Flag("hostname").Value.String()
 		description := cmd.Flag("description").Value.String()
 		ipxeScriptURL := cmd.Flag("ipxe-script-url").Value.String()
 		// for getting userdata, --userfile has higher priority.
 		userData = cmd.Flag("userdata").Value.String()
-		userDataFile := cmd.Flag("userfile").Value.String()
+		userDataFile = cmd.Flag("userfile").Value.String()
 		if userDataFile == "" {
 			userDataFile = cmd.Flag("file").Value.String()
 		}
@@ -205,6 +206,7 @@ func init() {
 	updateDeviceCmd.Flags().String("description", "", "Description")
 	updateDeviceCmd.Flags().String("ipxe-script-url", "", "Script URL")
 	updateDeviceCmd.Flags().String("userfile", "", "Read userdata from a `[file]`")
+	updateDeviceCmd.Flags().StringP("file", "f", "", "Read userdata from a file. This option works but is deprecated; use \"--userfile\" instead")
 	updateDeviceCmd.Flags().String("userdata", "", "userdata string. This options will be disgarded if \"--userfile\" is present")
 	updateDeviceCmd.Flags().BoolVarP(&alwaysPXE, "always-pxe", "", false, "Set PXE boot to `true`")
 	updateDeviceCmd.Flags().BoolVarP(&locked, "locked", "", false, "Lock device")
