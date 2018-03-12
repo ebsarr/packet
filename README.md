@@ -1,5 +1,5 @@
 # packet, a CLI tool to manage Packet services
-[![Latest Version](https://img.shields.io/badge/release-v2.1.2-yellowgreen.svg)](https://github.com/ebsarr/packet/releases) [![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
+[![Latest Version](https://img.shields.io/badge/release-v2.1.3-yellowgreen.svg)](https://github.com/ebsarr/packet/releases) [![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
 
 packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
