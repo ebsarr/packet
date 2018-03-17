@@ -1,12 +1,13 @@
 package cmd
 
 import (
+	"errors"
 	"io/ioutil"
 
 	"github.com/spf13/cobra"
 )
 
-var silent, spotInstance, alwaysPXE, locked bool
+var silent, spotInstance, alwaysPXE bool
 var spotPriceMax float64
 
 // baremetalCmd represents the baremetal command
@@ -76,19 +77,72 @@ var updateDeviceCmd = &cobra.Command{
 	Use:   "update-device",
 	Short: "Update a device",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var userData string
-		var userDataFile string
+		var userData, userDataFile, hostname, description, ipxeScriptURL string
+		var locked, alwaysPXE bool
+		// var userDataFile string
 		deviceID := cmd.Flag("device-id").Value.String()
-		hostname := cmd.Flag("hostname").Value.String()
-		description := cmd.Flag("description").Value.String()
-		ipxeScriptURL := cmd.Flag("ipxe-script-url").Value.String()
-		// for getting userdata, --userfile has higher priority.
-		userData = cmd.Flag("userdata").Value.String()
-		userDataFile = cmd.Flag("userfile").Value.String()
-		if userDataFile == "" {
-			userDataFile = cmd.Flag("file").Value.String()
+
+		// Retrieve current device info
+		client, err := NewPacketClient()
+		if err != nil {
+			return err
 		}
-		if userDataFile != "" {
+		d, _, err := client.Devices.Get(deviceID)
+		if err != nil {
+			return err
+		}
+
+		if cmd.Flag("hostname").Changed {
+			hostname = cmd.Flag("hostname").Value.String()
+		} else {
+			hostname = d.Hostname
+		}
+
+		if cmd.Flag("description").Changed {
+			description = cmd.Flag("description").Value.String()
+		}
+
+		alwaysPXEFlag := cmd.Flag("always-pxe").Value.String()
+		if alwaysPXEFlag != "" {
+			if alwaysPXEFlag == "true" {
+				alwaysPXE = true
+			} else if alwaysPXEFlag == "false" {
+				alwaysPXE = false
+			} else {
+				return errors.New("Bad value; --always-pxe only accepts true || false")
+			}
+		} else {
+			alwaysPXE = d.AlwaysPXE
+		}
+
+		if cmd.Flag("ipxe-script-url").Changed {
+			ipxeScriptURL = cmd.Flag("ipxe-script-url").Value.String()
+		} else {
+			ipxeScriptURL = d.IPXEScriptURL
+		}
+
+		lockFlag := cmd.Flag("lock").Value.String()
+		if lockFlag != "" {
+			if lockFlag == "true" {
+				locked = true
+			} else if lockFlag == "false" {
+				locked = false
+			} else {
+				return errors.New("Bad value; --lock only accepts true || false")
+			}
+		} else {
+			locked = d.Locked
+		}
+
+		// for getting userdata, --userfile has higher priority.
+		if !cmd.Flag("userfile").Changed {
+			if cmd.Flag("userdata").Changed {
+				userData = cmd.Flag("userdata").Value.String()
+			} else {
+				userData = d.UserData
+			}
+		} else {
+			userDataFile = cmd.Flag("userfile").Value.String()
 			data, err := ioutil.ReadFile(userDataFile)
 			if err != nil {
 				return err
@@ -96,7 +150,7 @@ var updateDeviceCmd = &cobra.Command{
 			userData = string(data)
 		}
 
-		err := UpdateDevice(deviceID, hostname, description, userData, ipxeScriptURL, []string{}, locked, alwaysPXE)
+		err = UpdateDevice(deviceID, hostname, description, userData, ipxeScriptURL, []string{}, locked, alwaysPXE)
 		return err
 	},
 }
@@ -206,10 +260,9 @@ func init() {
 	updateDeviceCmd.Flags().String("description", "", "Description")
 	updateDeviceCmd.Flags().String("ipxe-script-url", "", "Script URL")
 	updateDeviceCmd.Flags().String("userfile", "", "Read userdata from a `[file]`")
-	updateDeviceCmd.Flags().StringP("file", "f", "", "Read userdata from a file. This option works but is deprecated; use \"--userfile\" instead")
 	updateDeviceCmd.Flags().String("userdata", "", "userdata string. This options will be disgarded if \"--userfile\" is present")
-	updateDeviceCmd.Flags().BoolVarP(&alwaysPXE, "always-pxe", "", false, "Set PXE boot to `true`")
-	updateDeviceCmd.Flags().BoolVarP(&locked, "locked", "", false, "Lock device")
+	updateDeviceCmd.Flags().String("always-pxe", "", "PXE boot: [true || false]")
+	updateDeviceCmd.Flags().String("lock", "", "Lock device: [true || false]")
 
 	// Flags for other device commands that require the device ID.
 	deleteDeviceCmd.Flags().String("device-id", "", "Device ID")
