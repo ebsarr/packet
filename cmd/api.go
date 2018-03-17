@@ -70,7 +70,7 @@ func CreateProject(name, paymentID string) error {
 	}
 
 	req := packngo.ProjectCreateRequest{
-		Name:          name,
+		Name:            name,
 		PaymentMethodID: paymentID,
 	}
 
@@ -103,8 +103,8 @@ func UpdateProject(id, name, paymentID string) error {
 	}
 
 	req := packngo.ProjectUpdateRequest{
-		ID:            id,
-		Name:          name,
+		ID:              id,
+		Name:            name,
 		PaymentMethodID: paymentID,
 	}
 
@@ -152,23 +152,25 @@ func ListDevice(deviceID string) error {
 }
 
 // CreateDevice creates a new device
-func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
+func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData, ipxeScriptURL string, tags []string, spotInstance, alwaysPXE bool, spotPriceMax float64) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
 	req := packngo.DeviceCreateRequest{
-		Hostname:     hostname,
-		Plan:         plan,
-		Facility:     facility,
-		OS:           operatingSystem,
-		BillingCycle: billingCycle,
-		ProjectID:    projectID,
-		UserData:     userData,
-		SpotInstance: spotInstance,
-		SpotPriceMax: spotPriceMax,
-		Tags:         tags,
+		Hostname:      hostname,
+		Plan:          plan,
+		Facility:      facility,
+		OS:            operatingSystem,
+		BillingCycle:  billingCycle,
+		ProjectID:     projectID,
+		UserData:      userData,
+		SpotInstance:  spotInstance,
+		SpotPriceMax:  spotPriceMax,
+		Tags:          tags,
+		AlwaysPXE:     alwaysPXE,
+		IPXEScriptURL: ipxeScriptURL,
 	}
 
 	d, _, err := client.Devices.Create(&req)
@@ -181,23 +183,25 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 }
 
 // CreateDeviceVerbose creates a new device and logs events till the device is provisionned
-func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData string, tags []string, spotInstance bool, spotPriceMax float64) error {
+func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData, ipxeScriptURL string, tags []string, spotInstance, alwaysPXE bool, spotPriceMax float64) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
 	req := packngo.DeviceCreateRequest{
-		Hostname:     hostname,
-		Plan:         plan,
-		Facility:     facility,
-		OS:           operatingSystem,
-		BillingCycle: billingCycle,
-		ProjectID:    projectID,
-		UserData:     userData,
-		SpotInstance: spotInstance,
-		SpotPriceMax: spotPriceMax,
-		Tags:         tags,
+		Hostname:      hostname,
+		Plan:          plan,
+		Facility:      facility,
+		OS:            operatingSystem,
+		BillingCycle:  billingCycle,
+		ProjectID:     projectID,
+		UserData:      userData,
+		SpotInstance:  spotInstance,
+		SpotPriceMax:  spotPriceMax,
+		Tags:          tags,
+		AlwaysPXE:     alwaysPXE,
+		IPXEScriptURL: ipxeScriptURL,
 	}
 
 	d, _, err := client.Devices.Create(&req)
@@ -305,6 +309,32 @@ func RebootDevice(deviceID string) error {
 
 	_, e := client.Devices.Reboot(deviceID)
 	return e
+}
+
+// UpdateDevice updates a device by ID.
+func UpdateDevice(deviceID string, hostname, description, userData, ipxeScriptURL string, tags []string, locked, alwaysPXE bool) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := &packngo.DeviceUpdateRequest{
+		Hostname:      hostname,
+		Description:   description,
+		UserData:      userData,
+		Locked:        locked,
+		Tags:          tags,
+		AlwaysPXE:     alwaysPXE,
+		IPXEScriptURL: ipxeScriptURL,
+	}
+
+	device, _, err := client.Devices.Update(deviceID, req)
+	if err != nil {
+		return err
+	}
+
+	MarshallAndPrint(device)
+	return err
 }
 
 // IFs to Plan API
