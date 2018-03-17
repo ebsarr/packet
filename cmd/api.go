@@ -103,9 +103,9 @@ func UpdateProject(id, name, paymentID string) error {
 	}
 
 	req := packngo.ProjectUpdateRequest{
-		ID:            id,
-		Name:          name,
-		PaymentMethod: paymentID,
+		ID:              id,
+		Name:            name,
+		PaymentMethodID: paymentID,
 	}
 
 	p, _, err := client.Projects.Update(&req)
