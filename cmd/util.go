@@ -136,8 +136,8 @@ func ReadConfigs() (*Configs, error) {
 	return c, nil
 }
 
-// GetAPIKey returns either the default configured key or the one passed through the cli,
-// which has highest priority
+// GetAPIKey returns either the default configured key or the one passed through the CLI.
+// The key passed through the CLI has the highest priority
 func GetAPIKey() (string, error) {
 
 	apiKey := RootCmd.Flag("key").Value.String()
