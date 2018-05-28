@@ -2,3 +2,4 @@ bin
 packet.wiki
 .vscode
 .idea
+.DS_Store
