@@ -98,9 +98,10 @@ var createProjectCmd = &cobra.Command{
 	Use:   "create-project",
 	Short: "Create a new project",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		orgID := cmd.Flag("org-id").Value.String()
 		name := cmd.Flag("name").Value.String()
 		paymentID := cmd.Flag("payment-id").Value.String()
-		err := CreateProject(name, paymentID)
+		err := CreateProject(orgID, name, paymentID)
 		return err
 	},
 }
@@ -260,6 +261,7 @@ func init() {
 	listProjectCmd.Flags().String("project-id", "", "Project ID")
 
 	// Flags for command: packet admin create-project
+	createProjectCmd.Flags().String("org-id", "", "Organization ID")
 	createProjectCmd.Flags().String("name", "", "Project name")
 	createProjectCmd.Flags().String("payment-id", "", "ID of the payment method to associate to this project")
 

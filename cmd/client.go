@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/packethost/packngo"
+	"github.com/ebsarr/packngo"
 
 	"github.com/ebsarr/packet/extpackngo"
 )
@@ -13,7 +13,7 @@ func NewPacketClient() (*packngo.Client, error) {
 		return nil, err
 	}
 
-	packetClient := packngo.NewClient("", k, nil)
+	packetClient := packngo.NewClientWithAuth("", k, nil)
 	return packetClient, nil
 }
 

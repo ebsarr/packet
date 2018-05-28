@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/packethost/packngo"
+	"github.com/ebsarr/packngo"
 
 	"github.com/ebsarr/packet/extpackngo"
 )
@@ -173,13 +173,14 @@ func ListProject(projectID string) error {
 }
 
 // CreateProject creates a new project with the given project name
-func CreateProject(name, paymentID string) error {
+func CreateProject(orgID, name, paymentID string) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
 	req := packngo.ProjectCreateRequest{
+		OrganizationID:  orgID,
 		Name:            name,
 		PaymentMethodID: paymentID,
 	}
@@ -206,19 +207,18 @@ func DeleteProject(id string) error {
 
 // UpdateProject updates the project associated with the given project id either
 // by changing the name or the payment method.
-func UpdateProject(id, name, paymentID string) error {
+func UpdateProject(projectID, name, paymentID string) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
 	req := packngo.ProjectUpdateRequest{
-		ID:              id,
-		Name:            name,
-		PaymentMethodID: paymentID,
+		Name:            &name,
+		PaymentMethodID: &paymentID,
 	}
 
-	p, _, err := client.Projects.Update(&req)
+	p, _, err := client.Projects.Update(projectID, &req)
 	if err != nil {
 		return err
 	}
@@ -236,7 +236,7 @@ func ListDevices(projectID string) error {
 		return err
 	}
 
-	d, _, err := client.Devices.List(projectID)
+	d, _, err := client.Devices.List(projectID, &packngo.ListOptions{})
 	if err != nil {
 		return err
 	}
@@ -429,13 +429,13 @@ func UpdateDevice(deviceID string, hostname, description, userData, ipxeScriptUR
 	}
 
 	req := &packngo.DeviceUpdateRequest{
-		Hostname:      hostname,
-		Description:   description,
-		UserData:      userData,
-		Locked:        locked,
-		Tags:          tags,
-		AlwaysPXE:     alwaysPXE,
-		IPXEScriptURL: ipxeScriptURL,
+		Hostname:      &hostname,
+		Description:   &description,
+		UserData:      &userData,
+		Locked:        &locked,
+		Tags:          &tags,
+		AlwaysPXE:     &alwaysPXE,
+		IPXEScriptURL: &ipxeScriptURL,
 	}
 
 	device, _, err := client.Devices.Update(deviceID, req)
@@ -557,12 +557,11 @@ func UpdateSSHKey(keyID, label, key string) error {
 	}
 
 	req := packngo.SSHKeyUpdateRequest{
-		ID:    keyID,
-		Label: label,
-		Key:   key,
+		Label: &label,
+		Key:   &key,
 	}
 
-	k, _, err := client.SSHKeys.Update(&req)
+	k, _, err := client.SSHKeys.Update(keyID, &req)
 	if err != nil {
 		return err
 	}
