@@ -28,6 +28,116 @@ func ListFacilities() error {
 	return e
 }
 
+// IFs to Organizations API
+
+// ListOrganizations prints out the user's organizations
+func ListOrganizations() error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	orgs, _, err := client.Organizations.List()
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(orgs)
+	return e
+}
+
+// ListOrganization prints out a organization by id
+func ListOrganization(orgID string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	org, _, err := client.Organizations.Get(orgID)
+	if err != nil {
+		return err
+	}
+
+	e := MarshallAndPrint(org)
+	return e
+}
+
+// CreateOrganization creates a new organization
+func CreateOrganization(name, description, website, twitter, logo string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := packngo.OrganizationCreateRequest{
+		Name:        name,
+		Description: description,
+		Website:     website,
+		Twitter:     twitter,
+		Logo:        logo,
+	}
+
+	org, _, err := client.Organizations.Create(&req)
+	if err != nil {
+		return err
+	}
+
+	err = MarshallAndPrint(org)
+	return err
+}
+
+// UpdateOrganization updates an organization
+func UpdateOrganization(orgID, name, description, website, twitter, logo string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	req := packngo.OrganizationUpdateRequest{
+		Name:        &name,
+		Description: &description,
+		Website:     &website,
+		Twitter:     &twitter,
+		Logo:        &logo,
+	}
+
+	org, _, err := client.Organizations.Update(orgID, &req)
+	if err != nil {
+		return err
+	}
+
+	err = MarshallAndPrint(org)
+	return err
+}
+
+// DeleteOrganization deletes an organization by ID
+func DeleteOrganization(orgID string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	_, err = client.Organizations.Delete(orgID)
+
+	return err
+}
+
+// ListPaymentMethods returns PaymentMethods for an organization
+func ListPaymentMethods(orgID string) error {
+	client, err := NewPacketClient()
+	if err != nil {
+		return err
+	}
+
+	paymentMethods, _, err := client.Organizations.ListPaymentMethods(orgID)
+	if err != nil {
+		return err
+	}
+
+	err = MarshallAndPrint(paymentMethods)
+	return err
+}
+
 // IFs to Projects API
 
 // ListProjects prints out all projects of the user.
