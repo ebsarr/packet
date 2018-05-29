@@ -13,6 +13,76 @@ var adminCmd = &cobra.Command{
 	Short: "Manage projects, ssh keys, etc...",
 }
 
+// Organizations command
+
+var listOrganizationsCmd = &cobra.Command{
+	Use:   "list-orgs",
+	Short: "List organizations associated to user",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := ListOrganizations()
+		return err
+	},
+}
+
+var listOrganizationCmd = &cobra.Command{
+	Use:   "list-org",
+	Short: "List organization by ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		orgID := cmd.Flag("org-id").Value.String()
+		err := ListOrganization(orgID)
+		return err
+	},
+}
+
+var createOrganizationCmd = &cobra.Command{
+	Use:   "create-org",
+	Short: "Create a new organization",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		name := cmd.Flag("name").Value.String()
+		description := cmd.Flag("description").Value.String()
+		website := cmd.Flag("website").Value.String()
+		twitter := cmd.Flag("twitter").Value.String()
+		logo := cmd.Flag("logo").Value.String()
+		err := CreateOrganization(name, description, website, twitter, logo)
+		return err
+	},
+}
+
+var updateOrganizationCmd = &cobra.Command{
+	Use:   "update-org",
+	Short: "update a organization",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		orgID := cmd.Flag("org-id").Value.String()
+		name := cmd.Flag("name").Value.String()
+		description := cmd.Flag("description").Value.String()
+		website := cmd.Flag("website").Value.String()
+		twitter := cmd.Flag("twitter").Value.String()
+		logo := cmd.Flag("logo").Value.String()
+		err := UpdateOrganization(orgID, name, description, website, twitter, logo)
+		return err
+	},
+}
+
+var deleteOrganizationCmd = &cobra.Command{
+	Use:   "delete-org",
+	Short: "Delete organization by ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		orgID := cmd.Flag("org-id").Value.String()
+		err := DeleteOrganization(orgID)
+		return err
+	},
+}
+
+var listPaymentMethodsCmd = &cobra.Command{
+	Use:   "list-payment-methods",
+	Short: "List payment methods by organization ID",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		orgID := cmd.Flag("org-id").Value.String()
+		err := ListPaymentMethods(orgID)
+		return err
+	},
+}
+
 // Profile commands
 
 // addProfileCmd represents the configure command
@@ -249,8 +319,24 @@ var spotPricesCmd = &cobra.Command{
 }
 
 func init() {
-	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd, spotPricesCmd)
+	adminCmd.AddCommand(addProfileCmd, listProfilesCmd, deleteProfileCmd, listProjectsCmd, listProjectCmd, createProjectCmd, updateProjectCmd, deleteProjectCmd, listProjectEventsCmd, listSSHKeysCmd, listSSHKeyCmd, createSSHKeyCmd, deleteSSHKeyCmd, updateSSHKeyCmd, listOSCmd, listFacilitiesCmd, listPlansCmd, spotPricesCmd, listOrganizationsCmd, listOrganizationCmd, createOrganizationCmd, updateOrganizationCmd, deleteOrganizationCmd, listPaymentMethodsCmd)
 	RootCmd.AddCommand(adminCmd)
+
+	// Flags for organization related commands
+	listOrganizationCmd.Flags().String("org-id", "", "Organization ID")
+	createOrganizationCmd.Flags().String("name", "", "Name")
+	createOrganizationCmd.Flags().String("description", "", "Description")
+	createOrganizationCmd.Flags().String("website", "", "Website URL")
+	createOrganizationCmd.Flags().String("twitter", "", "Twitter URL")
+	createOrganizationCmd.Flags().String("logo", "", "Logo")
+	updateOrganizationCmd.Flags().String("org-id", "", "Organization ID")
+	updateOrganizationCmd.Flags().String("name", "", "Name")
+	updateOrganizationCmd.Flags().String("description", "", "Description")
+	updateOrganizationCmd.Flags().String("website", "", "Website URL")
+	updateOrganizationCmd.Flags().String("twitter", "", "Twitter URL")
+	updateOrganizationCmd.Flags().String("logo", "", "Logo")
+	deleteOrganizationCmd.Flags().String("org-id", "", "Organization ID")
+	listPaymentMethodsCmd.Flags().String("org-id", "", "Organization ID")
 
 	// Flags for profile related commands: add-profile, list-profiles, delete-profile
 	addProfileCmd.Flags().StringP("name", "n", "", "Profile name")
