@@ -1,5 +1,9 @@
 # packet, a CLI tool to manage Packet services
+<<<<<<< HEAD
 [![Latest Version](https://img.shields.io/badge/release-v2.3-yellowgreen.svg)](https://github.com/ebsarr/packet/releases) [![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
+=======
+[![Latest Version](https://img.shields.io/badge/release-v2.2.2-yellowgreen.svg)](https://github.com/ebsarr/packet/releases) [![Build Status](https://travis-ci.org/ebsarr/packet.svg?branch=master)](https://travis-ci.org/ebsarr/packet) [![Go Report Card](https://goreportcard.com/badge/github.com/ebsarr/packet)](https://goreportcard.com/report/github.com/ebsarr/packet) [![GoDoc](https://godoc.org/github.com/ebsarr/packet?status.svg)](https://godoc.org/github.com/ebsarr/packet)
+>>>>>>> master
 
 packet is a CLI tool to manage [packet.net](https://www.packet.net) services. You can browse the help [here](doc/packet.md).
 
@@ -199,13 +203,15 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md) to vie
 
 | Version | Description |
 |---------|-------------|
+| **2.2.2**     | Fixed a bug that blows away all tags on device updates |
+|  | Added `--tags` flag(not mandatory) to `create-device` and `update-device` commands | 
 | **2.2.1**     | Fixed compilation issue that emerged with the updated Packet API |
-| **2.2**     | "update-device" command added; more options for "create-device" command. |
+| **2.2**     | "update-device" command added; more options for "create-device" command |
 | **2.1.3**     | Fixed an issue that emerged with the updated Packet API |
 | **2.1.2**     | Fixed an issue that emerged with the updated Packet API |
 | **2.1.1**     | Bug fix around profile configuration. Now you can use `--name` or `-n` to configure and name a profile |
 | **2.1**     | Add support for spot market |
-| **2.0**     | Changed command structure, many bugs fixed.|
+| **2.0**     | Changed command structure, many bugs fixed|
 | **1.3**     | Can now delete profiles |
 | **1.2**     | Added profile support: use `--profile` option to switch between profiles | 
 |         | `ssh` command now reads keys from files, use `--file` instead of `ssh-key` to read from files.         |

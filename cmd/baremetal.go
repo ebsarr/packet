@@ -9,6 +9,7 @@ import (
 
 var silent, spotInstance, alwaysPXE bool
 var spotPriceMax float64
+var tags []string
 
 // baremetalCmd represents the baremetal command
 var baremetalCmd = &cobra.Command{
@@ -63,12 +64,11 @@ var createDeviceCmd = &cobra.Command{
 			userData = string(data)
 		}
 
-		// tags := cmd.Flag("tags").Value.String()
 		if silent {
-			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, []string{}, spotInstance, alwaysPXE, spotPriceMax)
+			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, tags, spotInstance, alwaysPXE, spotPriceMax)
 			return err
 		}
-		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, []string{}, spotInstance, alwaysPXE, spotPriceMax)
+		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, tags, spotInstance, alwaysPXE, spotPriceMax)
 		return err
 	},
 }
@@ -150,7 +150,11 @@ var updateDeviceCmd = &cobra.Command{
 			userData = string(data)
 		}
 
-		err = UpdateDevice(deviceID, hostname, description, userData, ipxeScriptURL, []string{}, locked, alwaysPXE)
+		if !cmd.Flag("tags").Changed {
+			tags = d.Tags
+		}
+
+		err = UpdateDevice(deviceID, hostname, description, userData, ipxeScriptURL, tags, locked, alwaysPXE)
 		return err
 	},
 }
@@ -253,6 +257,7 @@ func init() {
 	createDeviceCmd.Flags().BoolVarP(&alwaysPXE, "always-pxe", "", false, "Set PXE boot to `true`")
 	createDeviceCmd.Flags().String("ipxe-script-url", "", "Script URL")
 	createDeviceCmd.Flags().Float64VarP(&spotPriceMax, "spot-price-max", "", 0.0, "Spot market price bid")
+	createDeviceCmd.Flags().StringSliceVar(&tags, "tags", []string{}, "a list of comma separated tags")
 
 	// Flags for command: packet baremetal update-device
 	updateDeviceCmd.Flags().String("device-id", "", "Device ID")
@@ -263,6 +268,7 @@ func init() {
 	updateDeviceCmd.Flags().String("userdata", "", "userdata string. This options will be disgarded if \"--userfile\" is present")
 	updateDeviceCmd.Flags().String("always-pxe", "", "PXE boot: [true || false]")
 	updateDeviceCmd.Flags().String("lock", "", "Lock device: [true || false]")
+	updateDeviceCmd.Flags().StringSliceVar(&tags, "tags", []string{}, "a list of comma separated tags")
 
 	// Flags for other device commands that require the device ID.
 	deleteDeviceCmd.Flags().String("device-id", "", "Device ID")
