@@ -23,13 +23,18 @@ Manage projects, ssh keys, etc...
 
 * [packet](packet.md)	 - CLI tool to manage packet.net services
 * [packet admin add-profile](packet_admin_add-profile.md)	 - Set default configs for the packet cli.
+* [packet admin create-org](packet_admin_create-org.md)	 - Create a new organization
 * [packet admin create-project](packet_admin_create-project.md)	 - Create a new project
 * [packet admin create-sshkey](packet_admin_create-sshkey.md)	 - Configure a new SSH key
+* [packet admin delete-org](packet_admin_delete-org.md)	 - Delete organization by ID
 * [packet admin delete-profile](packet_admin_delete-profile.md)	 - Delete a profile
 * [packet admin delete-project](packet_admin_delete-project.md)	 - Delete a project
 * [packet admin delete-sshkey](packet_admin_delete-sshkey.md)	 - Delete SSH key associated with the given ID.
 * [packet admin list-facilities](packet_admin_list-facilities.md)	 - View a list of facilities(packet DCs)
+* [packet admin list-org](packet_admin_list-org.md)	 - List organization by ID
+* [packet admin list-orgs](packet_admin_list-orgs.md)	 - List organizations associated to user
 * [packet admin list-os](packet_admin_list-os.md)	 - View available operating systems
+* [packet admin list-payment-methods](packet_admin_list-payment-methods.md)	 - List payment methods by organization ID
 * [packet admin list-plans](packet_admin_list-plans.md)	 - View available plans.
 * [packet admin list-profiles](packet_admin_list-profiles.md)	 - List configured profiles
 * [packet admin list-project](packet_admin_list-project.md)	 - Retrieve a project by ID
@@ -38,6 +43,7 @@ Manage projects, ssh keys, etc...
 * [packet admin list-sshkey](packet_admin_list-sshkey.md)	 - View configured SSH key associated with the given ID.
 * [packet admin list-sshkeys](packet_admin_list-sshkeys.md)	 - View all configured SSH keys
 * [packet admin spot-prices](packet_admin_spot-prices.md)	 - View spot market prices
+* [packet admin update-org](packet_admin_update-org.md)	 - update a organization
 * [packet admin update-project](packet_admin_update-project.md)	 - Update a project
 * [packet admin update-sshkey](packet_admin_update-sshkey.md)	 - Update a SSH key: change the key or its label
 

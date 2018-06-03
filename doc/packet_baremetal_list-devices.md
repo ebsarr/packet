@@ -14,6 +14,9 @@ packet baremetal list-devices [flags]
 
 ```
   -h, --help                help for list-devices
+      --includes string     Specify which resources you want to return as collections instead of references. For multiple ressources, pass a comma separated string as in "resource1,resource2,resource3". Refer to the API docs(https://www.packet.net/developers/api/common-parameters/) for more info about the "include" parameter.
+      --page int            For paginated result sets, page of results to retrieve
+      --per-page int        For paginated result sets, the number of results to return per page
       --project-id string   Specify the project ID.
 ```
 

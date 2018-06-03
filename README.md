@@ -113,24 +113,30 @@ Syntax: `packet admin [subcommand]`
 
 |Subcommand | Description |
 |-----------|-------------|
-| `add-profile`         |Set default configs for the packet cli |
-| `create-project`      |Create a new project |
-| `create-sshkey`       |Configure a new SSH key |
-| `delete-profile`      |Delete a profile |
-| `delete-project`      |Delete a project |
-| `delete-sshkey`       |Delete SSH key associated with the given ID |
-| `list-facilities`     |View a list of facilities(packet DCs) |
-| `list-os`             |View available operating systems |
-| `list-plans`          |View available plans |
-| `list-profiles`       |List configured profiles |
-| `list-project`        |Retrieve a project by ID |
-| `list-project-events` |View events by project ID |
-| `list-projects`       |Retrieve all projects |
-| `list-sshkey`         |View configured SSH key associated with the given ID |
-| `list-sshkeys`        |View all configured SSH keys |
-| `spot-prices`         |View spot market prices. For more details on the Packet spot market, see the [Packet spot market documentation](https://help.packet.net/technical/deployment-options/spot-market). |
-| `update-project`      |Update a project |
-| `update-sshkey`       |Update a SSH key: change the key or its label |
+| `add-profile`          | Set default configs for the packet cli |
+| `create-project`       | Create a new project |
+| `create-sshkey`        | Configure a new SSH key |
+| `delete-profile`       | Delete a profile |
+| `delete-project`       | Delete a project |
+| `delete-sshkey`        | Delete SSH key associated with the given ID |
+| `list-facilities`      | View a list of facilities(packet DCs) |
+| `list-os`              | View available operating systems |
+| `list-plans`           | View available plans |
+| `list-orgs`            | List organizations associated to user |
+| `list-org`             | List organization by ID |
+| `create-org`           | Create a new organization |
+| `update-org`           | update a organization |
+| `delete-org`           | Delete organization by ID |
+| `list-payment-methods` | List payment methods by organization ID |
+| `list-profiles`        | List configured profiles |
+| `list-project`         | Retrieve a project by ID |
+| `list-project-events`  | View events by project ID |
+| `list-projects`        | Retrieve all projects |
+| `list-sshkey`          | View configured SSH key associated with the given ID |
+| `list-sshkeys`         | View all configured SSH keys |
+| `spot-prices`          | View spot market prices. For more details on the Packet spot market, see the [Packet spot market documentation](https://help.packet.net/technical/deployment-options/spot-market). |
+| `update-project`       | Update a project |
+| `update-sshkey`        | Update a SSH key: change the key or its label |
 
 ## `packet baremetal`: Manage server devices
 
