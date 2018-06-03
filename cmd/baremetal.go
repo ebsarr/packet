@@ -23,7 +23,16 @@ var listDevicesCmd = &cobra.Command{
 	Short: "Retrieve all devices in a project",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		projectID := GetProjectID(cmd)
-		err := ListDevices(projectID)
+		page, err := cmd.Flags().GetInt("page")
+		if err != nil {
+			return err
+		}
+		perPage, err := cmd.Flags().GetInt("per-page")
+		if err != nil {
+			return err
+		}
+		includes := cmd.Flag("includes").Value.String()
+		err = ListDevices(projectID, includes, page, perPage)
 		return err
 	},
 }
@@ -238,6 +247,9 @@ func init() {
 
 	// Flags for command: packet baremetal list-devices
 	listDevicesCmd.Flags().String("project-id", "", "Specify the project ID.")
+	listDevicesCmd.Flags().Int("page", 0, "For paginated result sets, page of results to retrieve")
+	listDevicesCmd.Flags().Int("per-page", 0, "For paginated result sets, the number of results to return per page")
+	listDevicesCmd.Flags().String("includes", "", `Specify which resources you want to return as collections instead of references. For multiple ressources, pass a comma separated string as in "resource1,resource2,resource3". Refer to the API docs(https://www.packet.net/developers/api/common-parameters/) for more info about the "include" parameter.`)
 
 	// Flags for command: packet baremetal list-device
 	listDeviceCmd.Flags().String("device-id", "", "Specify ID of device to display.")

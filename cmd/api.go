@@ -230,13 +230,19 @@ func UpdateProject(projectID, name, paymentID string) error {
 // IFs to Device, Devices API
 
 // ListDevices prints out all devices associated with the given project id.
-func ListDevices(projectID string) error {
+func ListDevices(projectID, includes string, page, perPage int) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
 	}
 
-	d, _, err := client.Devices.List(projectID, &packngo.ListOptions{})
+	listOptions := &packngo.ListOptions{
+		Page:     page,
+		PerPage:  perPage,
+		Includes: includes,
+	}
+
+	d, _, err := client.Devices.List(projectID, listOptions)
 	if err != nil {
 		return err
 	}
