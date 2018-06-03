@@ -199,6 +199,10 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md) to vie
 
 | Version | Description |
 |---------|-------------|
+| **2.3**     | Added support for the "organization" API |
+|  | Support pagination for packet baremetal list-devices |
+|  | Release binaries for multiple platforms |
+|  | Install with homebrew on macOS |
 | **2.2.2**     | Fixed a bug that blows away all tags on device updates |
 |  | Added `--tags` flag(not mandatory) to `create-device` and `update-device` commands | 
 | **2.2.1**     | Fixed compilation issue that emerged with the updated Packet API |
