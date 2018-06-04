@@ -32,7 +32,8 @@ $ docker run -it ebsarr/packet bash
 ```
 
 <br>
-For mac users, you can homebrew install the binary
+For mac users, you can homebrew install the binary:
+
 ```
 $ brew install packet
 ```
