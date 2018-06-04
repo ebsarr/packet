@@ -30,7 +30,12 @@ You can also run it in a docker container:
 ```
 $ docker run -it ebsarr/packet bash
 ```
-
+<br>
+<br>
+For mac users, you can homebrew install the binary
+```
+$ brew install packet
+```
 Try the help
 ```
 $ packet -h
@@ -207,7 +212,6 @@ Type `packet -h` in your console or browse the help [here](doc/packet.md) to vie
 |---------|-------------|
 | **2.3**     | Added support for the "organization" API |
 |  | Support pagination for packet baremetal list-devices |
-|  | Release binaries for multiple platforms |
 |  | Install with homebrew on macOS |
 | **2.2.2**     | Fixed a bug that blows away all tags on device updates |
 |  | Added `--tags` flag(not mandatory) to `create-device` and `update-device` commands | 
