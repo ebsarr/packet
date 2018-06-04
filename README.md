@@ -25,12 +25,10 @@ $ go get -u github.com/ebsarr/packet
 ```
 `packet` executable will be installed in `$GOPATH/bin`
 <br>
-<br>
 You can also run it in a docker container:
 ```
 $ docker run -it ebsarr/packet bash
 ```
-<br>
 <br>
 For mac users, you can homebrew install the binary
 ```
