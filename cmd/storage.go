@@ -219,7 +219,7 @@ func init() {
 	createStorageCmd.Flags().String("facility", "ewr1", "ewr1 || sjc1 || ams1")
 	createStorageCmd.Flags().Int("size", 120, "Volume size")
 	createStorageCmd.Flags().String("frequency", "15min", "Snapshot frequency")
-	createStorageCmd.Flags().Int("count", 4, "Snapshots count")
+	createStorageCmd.Flags().Int("count", 4, "Snapshots count. if you pass 0, the volume will be created without a snapashot policy")
 
 	// Flags for command: packet storage list
 	listStorageCmd.Flags().String("volume-id", "", "Volume ID")

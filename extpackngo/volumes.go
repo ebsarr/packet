@@ -53,11 +53,11 @@ type Storage struct {
 
 // StorageCreateRequest represents the body of a storage create request
 type StorageCreateRequest struct {
-	Description      string          `json:"description"`
-	Plan             string          `json:"plan"`
-	Size             int             `json:"size"`
-	Facility         string          `json:"facility"`
-	SnapshotPolicies *SnapshotPolicy `json:"snapshot_policies"`
+	Description      string            `json:"description"`
+	Plan             string            `json:"plan"`
+	Size             int               `json:"size"`
+	Facility         string            `json:"facility"`
+	SnapshotPolicies []*SnapshotPolicy `json:"snapshot_policies"`
 }
 
 // StorageUpdateRequest represents the body of a storage update request

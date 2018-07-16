@@ -760,17 +760,19 @@ func CreateStorage(projectID, description, plan, facility, frequency string, siz
 		return err
 	}
 
-	// Create a snapshot policy
-	sp := &extpackngo.SnapshotPolicy{
-		SnapshotFrequency: frequency,
-		SnapshotCount:     count,
+	// Create a snapshot policy. If `count` is 0, we shall pass an empty object
+	snapshotPolicies := make([]*extpackngo.SnapshotPolicy, 1)
+	if count != 0 {
+		snapshotPolicies = append(snapshotPolicies, &extpackngo.SnapshotPolicy{
+			SnapshotFrequency: frequency,
+			SnapshotCount:     count})
 	}
 	request := &extpackngo.StorageCreateRequest{
 		Description:      description,
 		Plan:             plan,
 		Size:             size,
 		Facility:         facility,
-		SnapshotPolicies: sp,
+		SnapshotPolicies: snapshotPolicies,
 	}
 
 	storage, _, err := client.Storages.Create(projectID, request)
