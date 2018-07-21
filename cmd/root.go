@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,7 +20,7 @@ var RootCmd = &cobra.Command{
 		showVersion, _ := cmd.Flags().GetBool("version")
 		if showVersion {
 			// fmt.Printf("packet v%s\n", version)
-			fmt.Printf("%s\n", version)
+			fmt.Printf("%s v%s %v/%v\n", cmd.CommandPath(), version, runtime.GOOS, runtime.GOARCH)
 		}
 	},
 }
