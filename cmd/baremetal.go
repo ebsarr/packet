@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"io/ioutil"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +12,7 @@ var silent, spotInstance, alwaysPXE bool
 var spotPriceMax float64
 var tags []string
 
-// baremetalCmd represents the baremetal command
+// baremetalCmd represents t&he baremetal command
 var baremetalCmd = &cobra.Command{
 	Use:   "baremetal",
 	Short: "Manage server devices.",
@@ -59,6 +60,17 @@ var createDeviceCmd = &cobra.Command{
 		osType := cmd.Flag("os-type").Value.String()
 		billing := cmd.Flag("billing").Value.String()
 		ipxeScriptURL := cmd.Flag("ipxe-script-url").Value.String()
+
+		var terminationTime *time.Time = nil
+		terminationInt, err := cmd.Flags().GetInt64("termination-time")
+		if err != nil {
+			return err
+		}
+		if terminationInt != 0 {
+			t := time.Unix(terminationInt, 0)
+			terminationTime = &t
+		}
+
 		// for getting userdata, --userfile has higher priority.
 		userData = cmd.Flag("userdata").Value.String()
 		userDataFile := cmd.Flag("userfile").Value.String()
@@ -73,12 +85,7 @@ var createDeviceCmd = &cobra.Command{
 			userData = string(data)
 		}
 
-		if silent {
-			err := CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, tags, spotInstance, alwaysPXE, spotPriceMax)
-			return err
-		}
-		err := CreateDeviceVerbose(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, tags, spotInstance, alwaysPXE, spotPriceMax)
-		return err
+		return CreateDevice(projectID, hostname, plan, facility, osType, billing, userData, ipxeScriptURL, tags, spotInstance, alwaysPXE, spotPriceMax, terminationTime, silent)
 	},
 }
 
@@ -268,6 +275,7 @@ func init() {
 	createDeviceCmd.Flags().BoolVarP(&spotInstance, "spot-instance", "", false, "Create as a spot instance")
 	createDeviceCmd.Flags().BoolVarP(&alwaysPXE, "always-pxe", "", false, "Set PXE boot to `true`")
 	createDeviceCmd.Flags().String("ipxe-script-url", "", "Script URL")
+	createDeviceCmd.Flags().Int64("termination-time", 0, "Time to terminate instance (Unix timestamp)")
 	createDeviceCmd.Flags().Float64VarP(&spotPriceMax, "spot-price-max", "", 0.0, "Spot market price bid")
 	createDeviceCmd.Flags().StringSliceVar(&tags, "tags", []string{}, "a list of comma separated tags")
 
