@@ -267,8 +267,8 @@ func ListDevice(deviceID string) error {
 	return e
 }
 
-// CreateDevice creates a new device
-func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData, ipxeScriptURL string, tags []string, spotInstance, alwaysPXE bool, spotPriceMax float64) error {
+// CreateDevice creates a new device and optionally logs events till the device is provisionned
+func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData, ipxeScriptURL string, tags []string, spotInstance, alwaysPXE bool, spotPriceMax float64, terminationTime *time.Time, silent bool) error {
 	client, err := NewPacketClient()
 	if err != nil {
 		return err
@@ -288,41 +288,18 @@ func CreateDevice(projectID, hostname, plan, facility, operatingSystem, billingC
 		AlwaysPXE:     alwaysPXE,
 		IPXEScriptURL: ipxeScriptURL,
 	}
-
-	d, _, err := client.Devices.Create(&req)
-	if err != nil {
-		return err
-	}
-
-	e := MarshallAndPrint(d)
-	return e
-}
-
-// CreateDeviceVerbose creates a new device and logs events till the device is provisionned
-func CreateDeviceVerbose(projectID, hostname, plan, facility, operatingSystem, billingCycle, userData, ipxeScriptURL string, tags []string, spotInstance, alwaysPXE bool, spotPriceMax float64) error {
-	client, err := NewPacketClient()
-	if err != nil {
-		return err
-	}
-
-	req := packngo.DeviceCreateRequest{
-		Hostname:      hostname,
-		Plan:          plan,
-		Facility:      facility,
-		OS:            operatingSystem,
-		BillingCycle:  billingCycle,
-		ProjectID:     projectID,
-		UserData:      userData,
-		SpotInstance:  spotInstance,
-		SpotPriceMax:  spotPriceMax,
-		Tags:          tags,
-		AlwaysPXE:     alwaysPXE,
-		IPXEScriptURL: ipxeScriptURL,
+	if terminationTime != nil {
+		req.TerminationTime = &packngo.Timestamp{*terminationTime}
 	}
 
 	d, _, err := client.Devices.Create(&req)
 	if err != nil {
 		return err
+	}
+
+	if silent {
+		e := MarshallAndPrint(d)
+		return e
 	}
 
 	// print events till device is provisionned
